@@ -11,14 +11,18 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = service_account_path
 
 db = firestore.Client()
 
+def format_data(text):
+    formatted_text = text.replace('\\n', '\n').replace('\\t', '\t')
+    return formatted_text
+
 # Uploading to firestore
 def upload_to_firestore(df):
     for index, row in df.iterrows():
         doc_id = str(index)
         data = {
-            'Question': row['Question'],
-            'Code': row['Code'],
-            'Plain Text': row['Plain Text']
+            'Question': format_data(row['Question']),
+            'Code': format_data(row['Code']),
+            'Plain Text': format_data(row['Plain Text'])
         }
         # print(data)
         db.collection('Training_data').document(doc_id).set(data)
