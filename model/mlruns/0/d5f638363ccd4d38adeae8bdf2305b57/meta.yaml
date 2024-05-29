@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/rahulodedra/Downloads/LeetSummarizer/model/mlruns/0/d5f638363ccd4d38adeae8bdf2305b57/artifacts
+end_time: 1716914957827
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d5f638363ccd4d38adeae8bdf2305b57
+run_name: fearless-ram-736
+run_uuid: d5f638363ccd4d38adeae8bdf2305b57
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1716914946500
+status: 3
+tags: []
+user_id: rahulodedra
