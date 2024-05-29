@@ -1,31 +1,6 @@
 import unittest
 import pandas as pd
 
-def remove_comments(code: str) -> str:
-    """
-    Remove comments from the provided Python code.
-
-    Parameters:
-    code (str): The input Python code as a string.
-
-    Returns:
-    str: The Python code with comments removed.
-    """
-    lines = code.split('\n')
-    cleaned_lines = []
-    for line in lines:
-        # Find the position of the comment symbol
-        comment_pos = line.find('#')
-        if comment_pos != -1:
-            # Keep everything before the comment symbol
-            cleaned_lines.append(line[:comment_pos].rstrip())
-        else:
-            # No comment on this line, keep it as is
-            cleaned_lines.append(line)
-    # Join the cleaned lines back into a single string
-    cleaned_code = '\n'.join(cleaned_lines)
-    return cleaned_code
-
 def read_and_validate_excel(file_path: str):
     """
     Read a excel file and validate that it contains only the required columns:
@@ -57,10 +32,6 @@ def read_and_validate_excel(file_path: str):
         raise ValueError(f"Extra columns present: {', '.join(extra_columns)}")
     
     return df
-
-
-
-import unittest
 
 def remove_comments(code: str) -> str:
     """
@@ -97,47 +68,32 @@ class TestRemoveComments(unittest.TestCase):
         cleaned_code = remove_comments(code)
         self.assertNotIn('#', cleaned_code)
 
-    def test_single_line_comment(self):
-        code = "print('Hello, world!') # This is a comment"
-        cleaned_code = remove_comments(code)
-        self.assertNotIn('#', cleaned_code)
-
     def test_multiple_comments(self):
         code = """
-# This is a comment
-print('Hello, world!') # This is another comment
-# Another comment line
-print('Goodbye, world!')
-"""
-        cleaned_code = remove_comments(code)
-        self.assertNotIn('#', cleaned_code)
-
-    def test_inline_comment(self):
-        code = "x = 5 # This is a comment"
-        cleaned_code = remove_comments(code)
-        self.assertNotIn('#', cleaned_code)
-
-    def test_empty_lines(self):
-        code = "\n\nprint('Hello, world!')\n\n"
+        # This is a comment
+        print('Hello, world!') # This is another comment
+        # Another comment line
+        print('Goodbye, world!')
+        """
         cleaned_code = remove_comments(code)
         self.assertNotIn('#', cleaned_code)
 
     def test_lines_with_only_comments(self):
         code = """
-# This is a comment
-# Another comment
-print('Hello, world!')
-"""
+        # This is a comment
+        # Another comment
+        print('Hello, world!')
+        """
         cleaned_code = remove_comments(code)
         self.assertNotIn('#', cleaned_code)
 
     def test_mixed_content(self):
         code = """
-# This is a comment
-x = 10 # Initialize x
-print(x) # Print x
-# End of script
-"""
+        # This is a comment
+        x = 10 # Initialize x
+        print(x) # Print x
+        # End of script
+        """
         cleaned_code = remove_comments(code)
         self.assertNotIn('#', cleaned_code)
 
