@@ -1,0 +1,59 @@
+import pandas as pd
+
+def remove_comments(code: str) -> str:
+    """
+    Remove comments from the provided Python code.
+
+    Parameters:
+    code (str): The input Python code as a string.
+
+    Returns:
+    str: The Python code with comments removed.
+    """
+    lines = code.split('\n')
+    cleaned_lines = []
+    for line in lines:
+        # Find the position of the comment symbol
+        comment_pos = line.find('#')
+        if comment_pos != -1:
+            # Keep everything before the comment symbol
+            cleaned_lines.append(line[:comment_pos].rstrip())
+        else:
+            # No comment on this line, keep it as is
+            cleaned_lines.append(line)
+    # Join the cleaned lines back into a single string
+    cleaned_code = '\n'.join(cleaned_lines)
+    return cleaned_code
+
+def read_and_validate_excel(file_path: str):
+    """
+    Read a excel file and validate that it contains only the required columns:
+    'Question', 'Code', and 'Plain Text'.
+
+    Parameters:
+    file_path (str): The path to the excel file.
+
+    Returns:
+    pd.DataFrame: The DataFrame if validation is successful.
+
+    Raises:
+    ValueError: If the required columns are not present or if there are extra columns in the excel file.
+    """
+    # Read the CSV file
+    df = pd.read_excel(file_path)
+    
+    # Define the required columns
+    required_columns = ['Question', 'Code', 'Plain Text']
+    
+    # Check if all required columns are present in the DataFrame
+    if not all(column in df.columns for column in required_columns):
+        missing_columns = [column for column in required_columns if column not in df.columns]
+        raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
+    
+    # Check for extra columns
+    extra_columns = [column for column in df.columns if column not in required_columns]
+    if extra_columns:
+        raise ValueError(f"Extra columns present: {', '.join(extra_columns)}")
+    
+    return df
+
