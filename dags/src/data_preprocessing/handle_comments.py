@@ -24,4 +24,7 @@ def remove_comments(code: str) -> str:
                 cleaned_lines.append(line)
     # Join the cleaned lines back into a single string
     cleaned_code = '\n'.join(cleaned_lines)
+    print(cleaned_code)
     return cleaned_code
+
+remove_comments('class Solution:\r\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\r\n        prevMap = {}  # val -> index\r\n\r\n        for i, n in enumerate(nums):\r\n            diff = target - n\r\n            if diff in prevMap:\r\n                return [prevMap[diff], i]\r\n            prevMap[n] = i')

@@ -1,5 +1,8 @@
+
+
 import os
-from google.cloud import firestore
+from google.cloud import  firestore
+
 
 def load_data() -> list:
     """
@@ -10,7 +13,9 @@ def load_data() -> list:
     """
     # Create your personal private key
     # Modify path accordingly. Currently file stored in model/data_preprocessing
-    service_account_path = "service_account_key.json"
+    
+    service_account_path = os.path.join(os.path.dirname(__file__), "service_account_key.json")
+    print(service_account_path)
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = service_account_path
 
     db = firestore.Client()
@@ -25,7 +30,12 @@ def load_data() -> list:
                 data.append(doc.to_dict())
             else:
                 print("No such document!")
-    
+    # file = open('items.txt','w')
+    # for item in data:
+    #     file.write(item+"\n")
+    # file.close()
+
     return data
 
-#load_data()
+
+# load_data()
