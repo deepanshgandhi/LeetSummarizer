@@ -1,3 +1,7 @@
 pandas
 scikit-learn
 kneed
+google-cloud-firestore
+grpcio
+google-cloud-core
+firebase_admin
