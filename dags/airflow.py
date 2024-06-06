@@ -14,7 +14,7 @@ from src.data_preprocessing.handle_comments import remove_comments
 conf.set('core', 'enable_xcom_pickling', 'True')
 
 default_args = {
-    'owner': 'brijesh',
+    'owner': 'sanket',
     'start_date': datetime(2024, 5, 18),
     'retries': 0,  # Number of retries in case of task failure
     'retry_delay': timedelta(minutes=5),  # Delay before retries
@@ -64,7 +64,17 @@ dag = DAG(
 
 
 
+# task_validate_code = PythonOperator(
+#     task_id='validate_code',
+#     python_callable=validate_code,
+#     dag=dag,
+# )
 
+# task_validate_schema = PythonOperator(
+#     task_id='validate_schema',
+#     python_callable=validate_schema,
+#     dag=dag,
+# )
 
 
 
@@ -77,12 +87,12 @@ task_load_data = PythonOperator(
     dag=dag,
 )
 # # Define the tasks
-task_handle_comments = PythonOperator(
-    task_id='handle_comments',
-    python_callable=remove_comments,
-    op_args=[task_load_data.output],
-    dag=dag,
-)
+# task_handle_comments = PythonOperator(
+#     task_id='handle_comments',
+#     python_callable=remove_comments,
+#     op_args=[task_load_data.output],
+#     dag=dag,
+# )
 
 # task_validate_code = PythonOperator(
 #     task_id='validate_code',
@@ -119,5 +129,5 @@ task_load_data
 
 
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     dag.cli()
