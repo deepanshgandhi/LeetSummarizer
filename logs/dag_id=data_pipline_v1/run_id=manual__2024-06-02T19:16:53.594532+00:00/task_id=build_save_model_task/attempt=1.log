@@ -1,0 +1,20 @@
+[2024-06-02T19:16:59.866+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2024-06-02T19:16:59.875+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipline_v1.build_save_model_task manual__2024-06-02T19:16:53.594532+00:00 [queued]>
+[2024-06-02T19:16:59.878+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipline_v1.build_save_model_task manual__2024-06-02T19:16:53.594532+00:00 [queued]>
+[2024-06-02T19:16:59.878+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2024-06-02T19:16:59.883+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): build_save_model_task> on 2024-06-02 19:16:53.594532+00:00
+[2024-06-02T19:16:59.892+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:61: DeprecationWarning: This process (pid=126) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-06-02T19:16:59.893+0000] {standard_task_runner.py:63} INFO - Started process 136 to run task
+[2024-06-02T19:16:59.894+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'data_pipline_v1', 'build_save_model_task', 'manual__2024-06-02T19:16:53.594532+00:00', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/***.py', '--cfg-path', '/tmp/tmpikbks1v8']
+[2024-06-02T19:16:59.896+0000] {standard_task_runner.py:91} INFO - Job 13: Subtask build_save_model_task
+[2024-06-02T19:16:59.935+0000] {task_command.py:426} INFO - Running <TaskInstance: data_pipline_v1.build_save_model_task manual__2024-06-02T19:16:53.594532+00:00 [running]> on host 5c4500cfcd77
+[2024-06-02T19:16:59.976+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='brijesh' AIRFLOW_CTX_DAG_ID='data_pipline_v1' AIRFLOW_CTX_TASK_ID='build_save_model_task' AIRFLOW_CTX_EXECUTION_DATE='2024-06-02T19:16:53.594532+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-06-02T19:16:53.594532+00:00'
+[2024-06-02T19:16:59.977+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2024-06-02T19:17:13.712+0000] {python.py:237} INFO - Done. Returned value was: [250.32804209291427, 128.89457877623192, 91.64796947554561, 72.46932731979095, 59.86327285249884, 52.06204237509108, 46.597186677802505, 41.503691835394186, 36.95114238763414, 33.98847132890032, 31.158175787006293, 28.84160432553611, 26.975244440370844, 25.31069460440262, 23.870878579148386, 22.74762480402991, 21.53078145664584, 20.78619821689674, 20.164955022705414, 19.36517825083055, 18.808369593226242, 18.340560866407348, 17.91067364710829, 17.498696101453298, 16.92549900039608, 16.74569758790151, 15.971849566736282, 15.713641610762627, 15.265240945761876, 15.123488668482402, 14.956846830736168, 14.5644048677804, 14.346219766384518, 14.241510405343824, 13.87856494898143, 13.709270074630075, 13.323041961354464, 13.140532592766867, 12.780547568395741, 12.902743776484666, 12.781639801700791, 12.407094113235537, 11.969429488066993, 12.042173765648133, 11.862509887788736, 11.75906078767697, 11.511387460490853, 11.707834596270319, 11.459746173831961]
+[2024-06-02T19:17:13.715+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2024-06-02T19:17:13.761+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=data_pipline_v1, task_id=build_save_model_task, run_id=manual__2024-06-02T19:16:53.594532+00:00, execution_date=20240602T191653, start_date=20240602T191659, end_date=20240602T191713
+[2024-06-02T19:17:13.837+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2024-06-02T19:17:13.861+0000] {taskinstance.py:3498} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2024-06-02T19:17:13.862+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
