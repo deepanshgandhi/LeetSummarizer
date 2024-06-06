@@ -1,30 +1,20 @@
-def remove_comments(code: str) -> str:
+def remove_comments(data: list) -> list:
     """
-    Remove comments from the provided Python code.
+    Remove comments from the code in the data.
 
-    Parameters:
-    code (str): The input Python code as a string.
+    Args:
+    data (list): List of dictionaries containing 'Question', 'Code', and 'Plain_Text' keys.
 
     Returns:
-    str: The Python code with comments removed.
+    list: List of dictionaries with comments removed from the 'Code' key.
     """
-    lines = code.split('\n')
-    cleaned_lines = []
-    for line in lines:
-        # Find the position of the comment symbol
-        comment_pos = line.find('#')
-        if comment_pos != -1:
-            # Keep everything before the comment symbol, preserve leading spaces
-            cleaned_line = line[:comment_pos].rstrip()
-            if cleaned_line:  # Add non-empty lines only
-                cleaned_lines.append(cleaned_line)
-        else:
-            # No comment on this line, keep it as is
-            if line.strip():  # Add non-empty lines only
-                cleaned_lines.append(line)
-    # Join the cleaned lines back into a single string
-    cleaned_code = '\n'.join(cleaned_lines)
-    print(cleaned_code)
-    return cleaned_code
-
-remove_comments('class Solution:\r\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\r\n        prevMap = {}  # val -> index\r\n\r\n        for i, n in enumerate(nums):\r\n            diff = target - n\r\n            if diff in prevMap:\r\n                return [prevMap[diff], i]\r\n            prevMap[n] = i')
+    for item in data:
+        code = item.get('Code', '')
+        lines = code.split('\n')
+        clean_lines = []
+        for line in lines:
+            if not line.strip().startswith('#'):
+                clean_lines.append(line)
+        clean_code = '\n'.join(clean_lines)
+        item['Code'] = clean_code
+    return data
