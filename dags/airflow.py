@@ -6,7 +6,7 @@ from src.data_preprocessing.handle_comments import remove_comments
 from src.data_preprocessing.validate_code import validate_code
 from src.data_preprocessing.validate_schema import validate_schema
 from src.data_preprocessing.print_final_data import print_final_data
-# from src.data_preprocessing.dvc_pipeline import fetch_and_track_data
+from src.data_preprocessing.dvc_pipeline import fetch_and_track_data
 
 default_args = {
     'owner': 'sanket',
@@ -67,14 +67,14 @@ task_print_final_data = PythonOperator(
     dag=dag,
 )
 
-# task_dvc_pipeline = PythonOperator(
-#     task_id='update_dvc',
-#     python_callable=print,
-#     provide_context=True,
-#     dag=dag,
-# )
+task_dvc_pipeline = PythonOperator(
+    task_id='update_dvc',
+    python_callable=print,
+    provide_context=True,
+    dag=dag,
+)
 
-task_load_data >> task_validate_schema >> task_handle_comments >> task_validate_code >> task_print_final_data
+task_load_data >> task_validate_schema >> task_handle_comments >> task_validate_code >> task_print_final_data >> task_dvc_pipeline
 
 # task_load_data >> task_validate_schema >> task_handle_comments
 
