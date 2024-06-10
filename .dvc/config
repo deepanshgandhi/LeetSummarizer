@@ -4,4 +4,4 @@
 ['remote "leet-summarizer"']
     url = gs://leet-summarizer
 ['remote "leet-summarizer-latest"']
-    url = s3://leet-summarizer
+    url = gs://leet-summarizer
