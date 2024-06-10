@@ -1,0 +1,7 @@
+[core]
+    remote = leet-summarizer-latest
+    autostage = true
+['remote "leet-summarizer"']
+    url = gs://leet-summarizer
+['remote "leet-summarizer-latest"']
+    url = s3://leet-summarizer

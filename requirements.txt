@@ -1,3 +1,4 @@
 pandas
 scikit-learn
-kneed
+dvc
+google-cloud-firestore
