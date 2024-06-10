@@ -12,6 +12,8 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+    _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+    _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -51,7 +53,12 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
-    command: webserver
+    command: >
+      bash -c "
+        airflow db upgrade &&
+        airflow users create -r Admin -u ${_AIRFLOW_WWW_USER_USERNAME:-airflow} -p ${_AIRFLOW_WWW_USER_PASSWORD:-airflow} -e admin@example.com -f admin -l admin &&
+        airflow webserver
+      "
     ports:
       - 8080:8080
     healthcheck:
