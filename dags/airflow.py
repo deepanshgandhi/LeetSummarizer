@@ -74,8 +74,12 @@ task_dvc_pipeline = PythonOperator(
     dag=dag,
 )
 
-task_load_data >> task_validate_schema >> task_handle_comments >> task_validate_code >> task_print_final_data >> task_dvc_pipeline
 
-# task_load_data >> task_validate_schema >> task_handle_comments
+
+#Set up email notifications for success and failure
+task_load_data >> task_validate_schema
+task_validate_schema >> [task_handle_comments, task_validate_code]
+task_handle_comments >> task_print_final_data
+task_validate_code >> task_print_final_data
 
 dag.on_failure_callback = handle_failure
