@@ -16,7 +16,7 @@ from io import BytesIO
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
-driver_path = "/Users/rahulodedra/Downloads/chromedriver-mac-arm64/chromedriver"
+driver_path = "Scraping/driver/chromedriver"
 chrome_service = Service(executable_path=driver_path)
 driver = webdriver.Chrome(service=chrome_service)
 
