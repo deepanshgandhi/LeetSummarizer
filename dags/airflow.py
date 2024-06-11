@@ -81,5 +81,6 @@ task_load_data >> task_validate_schema
 task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
+task_print_final_data >> task_dvc_pipeline
 
 dag.on_failure_callback = handle_failure
