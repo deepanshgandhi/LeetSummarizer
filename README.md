@@ -54,7 +54,7 @@ The data pipeline comprises a single Directed Acyclic Graph (DAG) module encompa
 
 The below image shows the executed DAG pipeline.
 <!-- IMAGE GOES HERE -->
-![Pipeline Execution](assets/pipeline_execution.png)
+![Pipeline Execution](assets/pipeline_execution.jpeg)
 
 
 ## 6. Features
@@ -68,7 +68,7 @@ The below image shows the executed DAG pipeline.
 
 
 ```
-NOTE : NOTE: SchemaGen and StatisticsGen have been omitted from our pipeline as they are not pertinent to our project's dataset structure. However, it is advised to consider utilizing these libraries to enhance data handling capabilities.
+NOTE : SchemaGen and StatisticsGen have been omitted from our pipeline as they are not pertinent to our project's dataset structure since we are dealing with strings whereas the aforementioned libraries are only pertinent for categorical/numerical data types. However, it is advised to consider utilizing these libraries to enhance data handling capabilities.
 ```
 
 ## Running The Project
@@ -76,23 +76,34 @@ Ensure that the following prerequisites are in place before running the project:
 - Docker
 - Airflow
 
+<br>
+
 Once all requirements are satisfied, execute the following commands to run the project:
 
 Clone the GitHub repository
 ```bash
-git clone https://github.com/deepanshgandhi/LeetSummarizer.git
+% git clone https://github.com/deepanshgandhi/LeetSummarizer.git
+% cd LeetSummarizer
 ```
+
+<br>
 
 Download the docker image
 ```bash
-docker pull <image-name>
+LeetSummarizer % docker pull deepanshgandhi/leetsummarizer
 ```
+
+<br>
 
 Run the docker container
 ```bash
-docker-compose up -d
+LeetSummarizer % docker-compose up -d
 ```
+
+<br>
 
 ```
 NOTE : Google service key is required in order to execute the project successfully. Please contact the team to generate your personal service key.
+
+The service key should be added in the path: dags/src/data_preprocessing
 ```
