@@ -34,9 +34,10 @@ def get_problem_description(url):
     WebDriverWait(driver, 60).until(EC.invisibility_of_element_located((By.ID, "initial-loading")))
     html = driver.page_source
     soup = bs4.BeautifulSoup(html, "html.parser")
-    description_div = soup.find("div", {"class": "elfjS"})
-    # description_div = soup.find("div", {"data-track-load":"description_content"})
-    print(soup)
+    attr = {"class": "elfjS",
+            "data-track-load": "description_content"}
+    description_div = soup.find(attrs=attr)
+    print(description_div)
     if description_div:
         description = description_div.get_text(separator='\n')
     else:
@@ -90,6 +91,7 @@ def main():
                 problemset.append(problem)
                 writer.writerow([problem["title"], problem["url"], problem["Acceptance"], problem["difficulty"], problem["description"]])
 
+    driver.quit()
     with open('Scraping/problemset.json', 'w') as f:
         json.dump(problemset, f)
 
