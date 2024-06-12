@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
 def get_problem_description(url):
-    # Initialize the WebDriver (Make sure to specify the path to your WebDriver)
     driver = webdriver.Chrome(executable_path='Scraping/driver/chromedriver')  
     try:
         driver.get(url)
@@ -17,7 +16,7 @@ def get_problem_description(url):
         # attr = {"class": "elfjS"}
         # attr = {"class": "content__u3I1 question-content__JfgR"}
         # attr = {"data-track-load": "description_content"}
-        description_div = soup.find_all("meta", {"name": "description"})
+        description_div = soup.find_all("div",{"class": "elfjS"})
         if description_div:
             description = description_div
         else:
