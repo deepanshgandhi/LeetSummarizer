@@ -13,5 +13,5 @@ jobs:
         docker build . -t brijesh1012/hello-docker-hub:latest
     - name: publish 
       run: |
-        docker login -u brijesh1012 -p ${{f secrets.DOCKER_HUB_TOKEN }} 
+        docker login -u brijesh1012 -p ${{ secrets.DOCKER_HUB_TOKEN }} 
         docker push brijesh1012/hello-docker-hub:latest
