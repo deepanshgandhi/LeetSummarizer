@@ -1,17 +1,28 @@
-name: Publish image to Docker Hub
-on:
-  [workflow_dispatch]
+name: Build and Push Image Docker
 
+on:
+  push:
+   branches: [ main ]
+  pull_request:
+    branches: [ main ]
+      
 jobs:
-  publish_image:
-    runs-on: ubuntu-latest 
+  build:
+
+    runs-on: ubuntu-latest
+
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
-    - name: build 
+    - uses: actions/checkout@v1
+    
+    - name: Docker Login
+      env:
+        DOCKER_USER: brijesh1012  
+        DOCKER_PASSWORD: dckr_pat_CeHjyuLji7TKHNpVTxXKfKzgkJQ
       run: |
-        docker build . -t brijesh1012/hello-docker-hub:latest
-    - name: publish 
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+        
+    - name: Build and Push Image
       run: |
-        docker login -u brijesh1012 -p dckr_pat_CeHjyuLji7TKHNpVTxXKfKzgkJQ 
+        docker image build -t brijesh1012/hello-docker-hub:latest .
         docker push brijesh1012/hello-docker-hub:latest
