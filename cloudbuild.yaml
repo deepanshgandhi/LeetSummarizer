@@ -3,5 +3,6 @@ steps:
     args: ['rsync', '-r', '.', 'gs://dag-bucket-airflow/dags/']
     dir: 'dags' 
 
+
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'
