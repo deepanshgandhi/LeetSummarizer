@@ -6,12 +6,12 @@ jobs:
   publish_image:
     runs-on: ubuntu-latest 
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: build 
-        run: |
-          docker build . -t brijesh1012/hello-docker-hub:latest
-      - name: publish 
-        run: |
-          docker login -u brijesh1012 -p ${{f secrets.DOCKER_HUB_TOKEN }} 
-          docker push brijesh1012/hello-docker-hub:latest
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: build 
+      run: |
+        docker build . -t brijesh1012/hello-docker-hub:latest
+    - name: publish 
+      run: |
+        docker login -u brijesh1012 -p ${{f secrets.DOCKER_HUB_TOKEN }} 
+        docker push brijesh1012/hello-docker-hub:latest
