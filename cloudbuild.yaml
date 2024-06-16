@@ -1,0 +1,5 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '.', 'gs://dag-bucket-airflow/dags/']
+    dir: 'dags' 
+timeout: '120s'
