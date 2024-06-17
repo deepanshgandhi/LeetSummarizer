@@ -4,6 +4,7 @@ steps:
     args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer/dags']
     dir: 'dags' 
   
+  
  # Step to retrieve the service account key from Secret Manager
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
