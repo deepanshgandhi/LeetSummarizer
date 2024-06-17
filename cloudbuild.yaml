@@ -19,7 +19,7 @@ steps:
       - '-c'
       - |
         mkdir -p dags/src
-        mv /workspace/service_account_key.json dags/src/service_account_key.json
+        mv /workspace/service_account_key.json dags/src/data_preprocessing/service_account_key.json
 
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'
