@@ -1,10 +1,19 @@
-pandas
-scikit-learn
-dvc
-google-cloud-firestore
+accelerate --no-deps
 beautifulsoup4==4.10.0
+bitsandbytes --no-deps
+datasets
 docx==0.2.4
+dvc
+einops
+google-cloud-firestore
+pandas
+peft --no-deps
 python-docx==0.8.11
 requests==2.26.0
+scikit-learn
 selenium==4.3.0
+trl<0.9.0
+unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git
+wandb
 webdriver-manager==3.8.3
+xformers --no-deps
