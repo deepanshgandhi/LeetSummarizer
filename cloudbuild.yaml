@@ -5,7 +5,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service-account-key.json
+        gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service_account_key.json
 
   # Step to copy the service account key to the appropriate location in the repository
   - name: 'ubuntu'
@@ -14,7 +14,7 @@ steps:
       - '-c'
       - |
         mkdir -p dags/src
-        mv /workspace/service-account-key.json dags/src/service-account-key.json
+        mv /workspace/service_account_key.json dags/src/service_account_key.json
 
   # Step to sync the DAGs folder with the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
