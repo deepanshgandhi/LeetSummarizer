@@ -1,11 +1,5 @@
 steps:
-# Step to sync the DAGs folder with the GCS bucket
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer/dags']
-    dir: 'dags' 
-  
-  
- # Step to retrieve the service account key from Secret Manager
+  # Step to retrieve the service account key from Secret Manager
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
@@ -19,8 +13,13 @@ steps:
     args:
       - '-c'
       - |
-        mkdir -p dags/src
+        mkdir -p dags/src/data_preprocessing
         mv /workspace/service_account_key.json dags/src/data_preprocessing/service_account_key.json
+
+  # Step to sync the DAGs folder with the GCS bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer/dags']
+    dir: 'dags' 
 
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'
