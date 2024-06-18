@@ -27,7 +27,7 @@ steps:
       - '-c'
       - |
         echo "Syncing dags folder with GCS bucket..."
-        gsutil -m rsync -r dags/src/data_preprocessing gs://airflow-dags-leetsummarizer/dags
+        gsutil -m rsync -r src/data_preprocessing gs://airflow-dags-leetsummarizer/dags
         echo "Sync completed. Listing contents of GCS bucket:"
         gsutil ls -r gs://airflow-dags-leetsummarizer/dags
 
