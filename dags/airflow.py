@@ -61,7 +61,7 @@ task_validate_code = PythonOperator(
 
 task_print_final_data = PythonOperator(
     task_id='print_data',
-    python_callable=print,
+    python_callable=print_final_data,
     op_args=[task_validate_code.output],
     provide_context=True,
     dag=dag,
