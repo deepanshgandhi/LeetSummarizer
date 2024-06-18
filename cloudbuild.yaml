@@ -31,5 +31,6 @@ steps:
         echo "Sync completed. Listing contents of GCS bucket:"
         gsutil ls -r gs://airflow-dags-leetsummarizer/dags
 
+
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'
