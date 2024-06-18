@@ -26,11 +26,10 @@ steps:
     args:
       - '-c'
       - |
-        echo "Syncing dags folder with GCS bucket..."
-        gsutil -m rsync -r src/data_preprocessing gs://airflow-dags-leetsummarizer/dags
-        echo "Sync completed. Listing contents of GCS bucket:"
-        gsutil ls -r gs://airflow-dags-leetsummarizer/dags
-
+        echo "Copying entire repository to GCS bucket..."
+        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
+        echo "Copy completed. Listing contents of GCS bucket:"
+        gsutil ls -r gs://airflow-dags-leetsummarizer/
 
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'
