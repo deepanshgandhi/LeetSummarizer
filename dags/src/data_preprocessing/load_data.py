@@ -1,41 +1,37 @@
-
-
 import os
-from google.cloud import  firestore
-
+from google.cloud import firestore
 
 def load_data() -> list:
     """
-    Load data from firestore.
+    Load data from Firestore.
 
     Returns:
     list: The data in the form of a list of dictionaries.
     """
-    # Create your personal private key
-    # Modify path accordingly. Currently file stored in model/data_preprocessing
-    
     service_account_path = os.path.join(os.path.dirname(__file__), "service_account_key.json")
     print(service_account_path)
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = service_account_path
 
-    db = firestore.Client()
-    doc_ref = db.collection('Training_data').get()
+    try:
+        db = firestore.Client()
+        doc_ref = db.collection('Training_data').get()
 
-    if len(doc_ref) == 0:
-        print("Collection is empty!!")
-    else:
+        if len(doc_ref) == 0:
+            raise ValueError("Collection is empty!!")
+
         data = []
         for doc in doc_ref:
             if doc.exists:
                 data.append(doc.to_dict())
             else:
-                print("No such document!")
-    # file = open('items.txt','w')
-    # for item in data:
-    #     file.write(item+"\n")
-    # file.close()
+                raise ValueError("No such document!")
+    except Exception as e:
+        raise RuntimeError("Failed to load data from Firestore.") from e
 
     return data
 
 
-# load_data()
+
+# def load_data():
+#     # Simulate a failure condition
+#     raise Exception("Simulated failure for testing purposes")

@@ -1,33 +1,28 @@
-import pandas as pd
-
-def read_and_validate_excel(file_path: str):
+def validate_schema(data: list) -> list:
     """
-    Read a excel file and validate that it contains only the required columns:
-    'Question', 'Code', and 'Plain Text'.
+    Validate the schema of the data.
 
-    Parameters:
-    file_path (str): The path to the excel file.
-
-    Returns:
-    pd.DataFrame: The DataFrame if validation is successful.
+    Args:
+    data (list): List of dictionaries containing 'Question', 'Code', and 'Plain_Text' keys.
 
     Raises:
-    ValueError: If the required columns are not present or if there are extra columns in the excel file.
+    ValueError: If the schema validation fails for any item in the data.
     """
-    # Read the CSV file
-    df = pd.read_excel(file_path)
-    
-    # Define the required columns
-    required_columns = ['Question', 'Code', 'Plain Text']
-    
-    # Check if all required columns are present in the DataFrame
-    if not all(column in df.columns for column in required_columns):
-        missing_columns = [column for column in required_columns if column not in df.columns]
-        raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
-    
-    # Check for extra columns
-    extra_columns = [column for column in df.columns if column not in required_columns]
-    if extra_columns:
-        raise ValueError(f"Extra columns present: {', '.join(extra_columns)}")
-    
-    return df
+    try:
+        for idx, item in enumerate(data):
+            # Ensure that each dictionary item contains the required keys
+            if 'Question' not in item or 'Code' not in item or 'Plain Text' not in item:
+                raise ValueError(f"Validation failed for item at index {idx}: Missing required keys.")
+            # Check if the Code key is a non-empty string
+            if not isinstance(item['Code'], str) or not item['Code'].strip():
+                raise ValueError(f"Validation failed for item at index {idx}: Invalid or empty 'Code' value.")
+            # Check if the Question key is a non-empty string
+            if not isinstance(item['Question'], str) or not item['Question'].strip():
+                raise ValueError(f"Validation failed for item at index {idx}: Invalid or empty 'Question' value.")
+            # Check if the Plain_Text key is a non-empty string
+            if not isinstance(item['Plain Text'], str) or not item['Plain Text'].strip():
+                raise ValueError(f"Validation failed for item at index {idx}: Invalid or empty 'Plain_Text' value.")
+        return data
+    except Exception as e:
+        print(f"An error occurred during schema validation: {e}")
+        raise RuntimeError("Failed to validate schema.") from e

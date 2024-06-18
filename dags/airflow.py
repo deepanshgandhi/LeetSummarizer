@@ -1,89 +1,114 @@
-# Import necessary libraries and modules
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
-#from src.data_preprocessing.handle_comments import remove_comments
-from airflow import configuration as conf
-
-
+from airflow.utils.dates import days_ago
 from src.data_preprocessing.load_data import load_data
 from src.data_preprocessing.handle_comments import remove_comments
-# from src.data_preprocessing.validate_code import  validate_code
-# from src.data_preprocessing.validate_schema import validate_schema
-
-conf.set('core', 'enable_xcom_pickling', 'True')
+from src.data_preprocessing.validate_code import validate_code
+from src.data_preprocessing.validate_schema import validate_schema
+from src.data_preprocessing.print_final_data import print_final_data
+from src.data_preprocessing.dvc_pipeline import fetch_and_track_data
+from src.data_preprocessing.success_email import send_success_email
+from src.data_preprocessing.failure_email import send_failure_email
 
 default_args = {
-    'owner': 'brijesh',
-    'start_date': datetime(2024, 5, 18),
-    'retries': 0,  # Number of retries in case of task failure
-    'retry_delay': timedelta(minutes=5),  # Delay before retries
+    'owner': 'rahul',
+    'depends_on_past': False,
+    'start_date': days_ago(1),
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 0,
+    'retry_delay': timedelta(minutes=5),
 }
 
+# Function to handle failur
+def handle_failure(context):
+    task_instance = context['task_instance']
+    exception = task_instance.exception
+    # Log or handle the exception as needed
+    print(f"Task {task_instance.task_id} failed with exception: {exception}")
+    try:
+        send_failure_email(task_instance, exception)
+        print("Failure email sent successfully!")
+    except Exception as e:
+        print(f"Error sending failure email: {e}")
 
+# Define the DAG
 dag = DAG(
-    'data_pipline_v2',
+    'data_pipeline_v3',
     default_args=default_args,
-    description='Your Python DAG Description',
-    schedule_interval=None,  # Set the schedule interval or use None for manual triggering
+    description='LeetSummarizer Data Pipeline',
+    schedule_interval=None,
     catchup=False,
 )
-
-
-# load_data_task = PythonOperator(
-#     task_id='load_data_task',
-#     python_callable=load_data,
-#     dag=dag,
-# )
-
-
-# data_preprocessing_task = PythonOperator(
-#     task_id='data_preprocessing_task',
-#     python_callable=data_preprocessing,
-#     op_args=[load_data_task.output],
-#     dag=dag,
-# )
-
-
-# build_save_model_task = PythonOperator(
-#     task_id='build_save_model_task',
-#     python_callable=build_save_model,
-#     op_args=[data_preprocessing_task.output, "model2.sav"],
-#     provide_context=True,
-#     dag=dag,
-# )
-
-
-
-# load_model_task = PythonOperator(
-#     task_id='load_model_task',
-#     python_callable=load_model_elbow,
-#     op_args=["model2.sav", build_save_model_task.output],
-#     dag=dag,
-# )
-
-
-
-
-
-
-
-
-
 
 task_load_data = PythonOperator(
     task_id='load_data',
     python_callable=load_data,
+    provide_context=True,
     dag=dag,
 )
 
-# # Define the tasks
+task_validate_schema = PythonOperator(
+    task_id='validate_schema',
+    python_callable=validate_schema,
+    op_args=[task_load_data.output],
+    provide_context=True,
+    dag=dag,
+)
+
 task_handle_comments = PythonOperator(
     task_id='handle_comments',
     python_callable=remove_comments,
-    op_args=[task_load_data.output],
+    op_args=[task_validate_schema.output],
+    provide_context=True,
     dag=dag,
 )
+
+task_validate_code = PythonOperator(
+    task_id='validate_code',
+    python_callable=validate_code,
+    op_args=[task_handle_comments.output],
+    provide_context=True,
+    dag=dag,
+)
+
+task_print_final_data = PythonOperator(
+    task_id='print_data',
+    python_callable=print_final_data,
+    op_args=[task_validate_code.output],
+    provide_context=True,
+    dag=dag,
+)
+
+task_dvc_pipeline = PythonOperator(
+    task_id='update_dvc',
+    python_callable=fetch_and_track_data,
+    provide_context=True,
+    dag=dag,
+)
+
+task_send_email = PythonOperator(
+    task_id='task_send_email',
+    python_callable=send_success_email,
+    provide_context = True,
+    dag=dag,
+)
+
+# Set up task dependencies
+task_load_data >> task_validate_schema
+task_validate_schema >> [task_handle_comments, task_validate_code]
+task_handle_comments >> task_print_final_data
+task_validate_code >> task_print_final_data
+task_print_final_data >> task_dvc_pipeline
+task_dvc_pipeline >> task_send_email
+
+# Set up the failure callback
+dag.on_failure_callback = handle_failure
+
+
+
+
 
 # task_validate_code = PythonOperator(
 #     task_id='validate_code',
@@ -97,28 +122,6 @@ task_handle_comments = PythonOperator(
 #     dag=dag,
 # )
 
-# # Define the test tasks using BashOperator to run your test scripts
-# task_test_remove_comments = BashOperator(
-#     task_id='test_remove_comments',
-#     bash_command='pytest tests/test_remove_comments.py',
-#     dag=dag,
-# )
-
-# task_test_validate_code = BashOperator(
-#     task_id='test_validate_code',
-#     bash_command='pytest tests/test_validate_code.py',
-#     dag=dag,
-# )
-
-# Define task dependencies
-# task_handle_comments >> task_validate_code >> task_validate_schema
-# task_handle_comments >> task_test_remove_comments
-# task_validate_code >> task_test_validate_code
-
-task_load_data 
-# load_data_task >> data_preprocessing_task >> build_save_model_task >> load_model_task
 
 
 
-if __name__ == "__main__":
-    dag.cli()
