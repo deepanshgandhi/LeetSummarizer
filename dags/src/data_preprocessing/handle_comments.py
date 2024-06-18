@@ -1,13 +1,14 @@
-def remove_comments(code: str) -> str:
+def remove_comments(data: list) -> list:
     """
-    Remove comments from the provided Python code.
+    Remove comments from the code in the data.
 
-    Parameters:
-    code (str): The input Python code as a string.
+    Args:
+    data (list): List of dictionaries containing 'Question', 'Code', and 'Plain_Text' keys.
 
     Returns:
-    str: The Python code with comments removed.
+    list: List of dictionaries with comments removed from the 'Code' key.
     """
+<<<<<<< HEAD
     lines = code.split('\n')
     cleaned_lines = []
     for line in lines:
@@ -39,3 +40,15 @@ datalist = [{'Plain Text': "Use hashing. Go through the list of numbers, remembe
 
 
 handle_comments(datalist)
+=======
+    for item in data:
+        code = item.get('Code', '')
+        lines = code.split('\n')
+        clean_lines = []
+        for line in lines:
+            if not line.strip().startswith('#'):
+                clean_lines.append(line)
+        clean_code = '\n'.join(clean_lines)
+        item['Code'] = clean_code
+    return data
+>>>>>>> main
