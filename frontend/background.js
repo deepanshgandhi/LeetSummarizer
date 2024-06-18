@@ -1,15 +1,14 @@
-chrome.runtime.onInstalled.addListener(() => {
-    console.log('LeetCode Summarizer extension installed.');
+let scrapedData = {};
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'scrapedData') {
+        scrapedData = message.data;
+        console.log('Scraped data received:', scrapedData);
+    }
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'fetchQuestions') {
-        // Dummy response
-        const questions = [
-            { id: 1, title: 'Two Sum', summary: 'Find two numbers that add up to a target value.' },
-            { id: 2, title: 'Add Two Numbers', summary: 'Add two numbers represented by linked lists.' },
-        ];
-        sendResponse({ questions });
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'getScrapedData') {
+        sendResponse(scrapedData);
     }
-    return true;
 });

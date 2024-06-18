@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>LeetCode Summarizer</title>
-    <link rel="stylesheet" href="popup.css">
+    <title>LeetCode Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-<div id="container">
-    <h1>LeetCode Summarizer</h1>
-    <ul id="questions-list"></ul>
-    <div id="summary-popup" class="hidden">
-        <button id="close-summary">Close</button>
-        <div id="summary-content"></div>
-    </div>
-</div>
-<script src="popup.js"></script>
+    <h1>LeetCode Problem Data</h1>
+    <p><strong>Title:</strong> <span id="title"></span></p>
+    <p><strong>Description:</strong> <div id="description"></div></p>
+    <p><strong>Problem URL:</strong> <span id="problemUrl"></span></p>
+    <p><strong>User:</strong> <span id="user"></span></p>
+
+    <script src="popup.js"></script>
 </body>
 </html>

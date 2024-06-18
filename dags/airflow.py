@@ -69,7 +69,7 @@ task_print_final_data = PythonOperator(
 
 task_dvc_pipeline = PythonOperator(
     task_id='update_dvc',
-    python_callable=print,
+    python_callable=fetch_and_track_data,
     provide_context=True,
     dag=dag,
 )
