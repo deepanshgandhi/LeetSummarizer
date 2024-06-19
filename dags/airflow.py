@@ -77,6 +77,10 @@ task_print_final_data = PythonOperator(
     task_id='print_data',
     python_callable=print_final_data,
     op_args=[task_validate_code.output],
+    op_kwargs={
+            'bucket_name': 'airflow-dags-leetsummarizer',
+            'destination_blob_name': 'preprocessed_data.json'
+        },
     provide_context=True,
     dag=dag,
 )
