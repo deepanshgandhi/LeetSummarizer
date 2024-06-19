@@ -10,6 +10,7 @@ def print_final_data(data: list) -> None:
     Returns:
     None
     """
+    print("MAKING CHANGES HERE")
     for item in data:
         code = item.get('Code', '')
         question = item.get('Question','')
