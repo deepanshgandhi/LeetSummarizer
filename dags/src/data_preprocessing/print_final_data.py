@@ -1,3 +1,5 @@
+import json
+
 def print_final_data(data: list) -> None:
     """
     Prints the final cleaned data
@@ -23,5 +25,8 @@ def print_final_data(data: list) -> None:
         print("-"*100)
         print()
         print("-"*100)
+    print("Saving data in json format")
+    with open('preprocessed_data.json', 'w') as f:
+        json.dump(data, f)
 
 
