@@ -7,15 +7,41 @@
             font-family: Arial, sans-serif;
             margin: 10px;
         }
+        #generate-summary {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #back-button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #summary-page {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>LeetCode Problem Data</h1>
-    <p><strong>Title:</strong> <span id="title"></span></p>
-    <p><strong>Description:</strong> <div id="description"></div></p>
-    <p><strong>Problem URL:</strong> <span id="problemUrl"></span></p>
-    <p><strong>User:</strong> <span id="user"></span></p>
-
+    <div id="main-page">
+        <h1>LeetCode Problem Data</h1>
+        <p><strong>Title:</strong> <span id="title"></span></p>
+        <p><strong>Description:</strong> <div id="description"></div></p>
+        <p><strong>Problem URL:</strong> <span id="problemUrl"></span></p>
+        <p><strong>User:</strong> <span id="user"></span></p>
+        <button id="generate-summary" disabled>Generate Summary</button>
+    </div>
+    <div id="summary-page">
+        <h1>Submission Data</h1>
+        <pre id="submittedCode"></pre>
+        <button id="back-button">Back</button>
+    </div>
     <script src="popup.js"></script>
 </body>
 </html>
