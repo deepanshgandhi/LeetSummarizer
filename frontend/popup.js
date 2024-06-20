@@ -22,18 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add click event listener to "Generate Summary" button
     generateSummaryButton.addEventListener('click', () => {
-        chrome.storage.local.get(['scrapedData'], (result) => {
-            const data = result.scrapedData || {};
-            const submissionsUrl = data.problemUrl.replace('/description/', '/submissions/');
-            
-            // Redirect to submissions page and scrape the data
-            chrome.tabs.create({ url: submissionsUrl }, (tab) => {
-                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
-                    if (tabId === tab.id && changeInfo.status === 'complete') {
-                        chrome.tabs.sendMessage(tab.id, { type: 'scrapeSubmission' });
-                        chrome.tabs.onUpdated.removeListener(listener);
-                    }
-                });
+        chrome.storage.local.get(['scrapedData'], () => {
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, { type: 'scrapeSubmission' });
             });
         });
     });
@@ -47,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen for messages from content script to update the UI with submission data
     chrome.runtime.onMessage.addListener((message) => {
         if (message.type === 'showSubmission') {
-            document.getElementById('submittedCode').textContent = message.data.submittedCode || 'No code submitted.';
+            document.getElementById('submittedCode').innerHTML = message.data.submittedCode || 'No code submitted.';
             mainPage.style.display = 'none';
             summaryPage.style.display = 'block';
         }

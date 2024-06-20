@@ -41,23 +41,34 @@ function scrapeLeetCodeData() {
     }
 }
 
-function scrapeSubmissionData() {
+function scrapeSubmissionData(retries = 5) {
     try {
         const codeElement = document.querySelector('#editor > div.flex.flex-1.flex-col.overflow-hidden.pb-2 > div.flex-1.overflow-hidden > div > div > div.overflow-guard > div.monaco-scrollable-element.editor-scrollable.vs-dark > div.lines-content.monaco-editor-background > div.view-lines.monaco-mouse-cursor-text');
+
         if (!codeElement) {
             console.error('Code element not found.');
+
+            if (retries > 0) {
+                setTimeout(() => scrapeSubmissionData(retries - 1), 1000);
+            } else {
+                console.error('Max retries reached. Code element not found.');
+            }
             return;
         }
 
-        const code = codeElement.textContent.trim();
-        console.log(code);
+        const code = codeElement.innerHTML.trim();
+        const logCode = codeElement.textContent.trim();
+
+        console.log('Scraped code:', logCode);
         chrome.storage.local.get(['scrapedData'], (result) => {
             const data = result.scrapedData || {};
             data.submittedCode = code;
 
             chrome.storage.local.set({ scrapedData: data }, () => {
                 console.log('Submission data stored successfully:', data);
-
+                // console.log('------------------------------------------------------');
+                // console.log(data);
+                // console.log('------------------------------------------------------');
                 chrome.runtime.sendMessage({ type: 'showSubmission', data });
             });
         });
@@ -77,6 +88,7 @@ function clickButtonAndScrape() {
 }
 
 function determinePageAndScrape() {
+    console.log('Current URL:', window.location.href);
     if (window.location.href.includes('/submissions/')) {
         scrapeSubmissionData();
     } else if (window.location.href.includes('/description/')) {
