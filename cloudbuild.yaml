@@ -1,5 +1,4 @@
 steps:
-  # Step to retrieve the service account key from Secret Manager
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
@@ -9,7 +8,6 @@ steps:
         gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service_account_key.json
         echo "Service account key retrieved and saved to /workspace/service_account_key.json"
 
-  # Step to copy the service account key to the appropriate location in the repository
   - name: 'ubuntu'
     entrypoint: 'bash'
     args:
@@ -23,16 +21,15 @@ steps:
         echo "Listing contents of dags/src/data_preprocessing:"
         ls -l dags/src/data_preprocessing
 
-  # Step to sync the DAGs folder with the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo "Syncing dags folder with GCS bucket..."
-        gsutil rsync -r . gs://airflow-dags-leetsummarizer/dags
-        echo "Sync completed. Listing contents of GCS bucket:"
-        gsutil ls -r gs://airflow-dags-leetsummarizer/dags
+        echo "Copying entire repository to GCS bucket..."
+        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
+        echo "Copy completed. Listing contents of GCS bucket:"
+        gsutil ls -r gs://airflow-dags-leetsummarizer/
 
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'

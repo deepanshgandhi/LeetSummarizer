@@ -75,15 +75,19 @@ task_validate_code = PythonOperator(
 
 task_print_final_data = PythonOperator(
     task_id='print_data',
-    python_callable=print,
+    python_callable=print_final_data,
     op_args=[task_validate_code.output],
+    op_kwargs={
+            'bucket_name': 'airflow-dags-leetsummarizer',
+            'destination_blob_name': 'dags/data/preprocessed_data.json'
+        },
     provide_context=True,
     dag=dag,
 )
 
 task_dvc_pipeline = PythonOperator(
     task_id='update_dvc',
-    python_callable=print,
+    python_callable=fetch_and_track_data,
     provide_context=True,
     dag=dag,
 )
