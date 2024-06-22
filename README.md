@@ -107,3 +107,36 @@ NOTE : Google service key is required in order to execute the project successful
 
 The service key should be added in the path: dags/src/data_preprocessing
 ```
+
+---
+---
+
+# Milestone : Model Pipeline
+
+## 1. Model Pipeline Components
+The model pipeline comprises a single Directed Acyclic Graph (DAG) module encompassing 9 distinct tasks. The model pipeline gets's triggered after the execution of data pipeline. Below is an overview of each task present in the model pipeline:
+
+<!-- IMAGE GOES HERE -->
+![Pipeline Flow](assets/pipeline_flow.jpg)
+
+1. task_install_dependencies : Executes the install_dependencies() function to install necessary Python packages and dependencies using pip, including a specific package from a GitHub repository and other listed libraries.
+
+2. task_load_packages : Executes the load_packages() function to import and make available a variety of required Python packages and modules used in model training, while handling any module import errors.
+
+3. task_load_data : Executes the load_data(file_path) function to read data from an [Excel file](), split it into training and testing datasets, and return these datasets.
+
+4. task_load_model : Executes the load_model() function to load a pre-trained FastLanguageModel and its tokenizer with specified parameters, returning both the model and the tokenizer.
+
+5. task_configure_model : The function configures a FastLanguageModel with specified parameters, including target modules, LoRA parameters, and gradient checkpointing options, and returns the configured model.
+
+6. task_preprocess_data : Executes the preprocess_data() function to preprocess a DataFrame by formatting its columns into a specific text prompt, adding an end-of-sequence token, and converting the processed data into a dataset suitable for further use.
+
+7. task_train_model : Executes the train_model() function to preprocess the training data, create a dataset, and train the provided model using specified training arguments and configurations, returning the trainer object and training statistics.
+
+8. task_plot_loss : Executes the plot_loss() function to extract training loss values from the trainer's log history and plot them over training steps, displaying a graph of the training loss per step.
+
+9. task_evaluate_model : Executes the evaluate_model() function to evaluate a given model on a test dataset (test_df) using specified evaluation metrics including ROUGE-L score and cosine similarity. It generates text based on prompts and compares them with actual texts, plotting ROUGE-L and similarity scores per data point, and returns lists of ROUGE-L and similarity scores.
+
+The below image shows the executed DAG pipeline.
+<!-- IMAGE GOES HERE -->
+![Pipeline Execution](assets/pipeline_execution.jpeg)
