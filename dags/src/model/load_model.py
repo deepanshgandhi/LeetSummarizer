@@ -1,12 +1,12 @@
 from unsloth import FastLanguageModel
 
-def load_model_tokeniser(**kwargs):
+def load_model_tokeniser(data, **kwargs):
     max_seq_length = 2048
     dtype = None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
     load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 
     model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name="unsloth/llama-3-8b-bnb-4bit",
+        model_name="unsloth/mistral-7b-v0.3-bnb-4bit",
         max_seq_length=max_seq_length,
         dtype=dtype,
         load_in_4bit=load_in_4bit
@@ -29,3 +29,4 @@ def load_model_tokeniser(**kwargs):
     # Push model and tokenizer to XCom for other tasks
     kwargs['ti'].xcom_push(key='model', value=model)
     kwargs['ti'].xcom_push(key='tokenizer', value=tokenizer)
+    kwargs['ti'].xcom_push(key='data', value=data)

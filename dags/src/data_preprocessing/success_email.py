@@ -6,7 +6,6 @@ from email.mime.multipart import MIMEMultipart
 
 def send_success_email(**kwargs):
     sender_email = Variable.get('EMAIL_USER')
-    # receiver_emails = ["odedra.r@northeastern.edu"]
     password = Variable.get('EMAIL_PASSWORD')
     receiver_emails = ["odedra.r@northeastern.edu","shah.sanke@northeastern.edu", 
                       "gandhi.dee@northeastern.edu","savaj.b@northeastern.edu","madani.r@northeastern.edu"]
