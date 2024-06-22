@@ -64,12 +64,33 @@ function scrapeSubmissionData(retries = 5) {
             const data = result.scrapedData || {};
             data.submittedCode = code;
 
+            const postData = {
+                ...data,
+                submittedCode: logCode
+            };
+
             chrome.storage.local.set({ scrapedData: data }, () => {
                 console.log('Submission data stored successfully:', data);
                 // console.log('------------------------------------------------------');
                 // console.log(data);
                 // console.log('------------------------------------------------------');
                 chrome.runtime.sendMessage({ type: 'showSubmission', data });
+
+                // Make the POST request
+                fetch('https://leet-summarizer-server-zznx.vercel.app/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        console.log('POST request successful. Response:', responseData);
+                    })
+                    .catch(error => {
+                        console.error('Error in POST request:', error);
+                    });
             });
         });
     } catch (error) {
