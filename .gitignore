@@ -1,10 +1,4 @@
-
 /dags/src/firebase_service_account_key.json
-logs/
-=======
-/dags/src/firebase_service_account_key.json
-logs/
-firebase_service_account_key.json
 logs/
 __pycache__/
 dags/**/__pycache__/
