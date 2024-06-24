@@ -1,0 +1,23 @@
+[2024-06-10T23:29:17.054+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2024-06-10T23:29:17.104+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipeline_v2.update_dvc manual__2024-06-10T22:36:17.950186+00:00 [queued]>
+[2024-06-10T23:29:17.123+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipeline_v2.update_dvc manual__2024-06-10T22:36:17.950186+00:00 [queued]>
+[2024-06-10T23:29:17.124+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2024-06-10T23:29:17.160+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): update_dvc> on 2024-06-10 22:36:17.950186+00:00
+[2024-06-10T23:29:17.181+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:61: DeprecationWarning: This process (pid=86) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-06-10T23:29:17.181+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline_v2', 'update_dvc', 'manual__2024-06-10T22:36:17.950186+00:00', '--job-id', '162', '--raw', '--subdir', 'DAGS_FOLDER/***.py', '--cfg-path', '/tmp/tmpc29ccnll']
+[2024-06-10T23:29:17.187+0000] {standard_task_runner.py:63} INFO - Started process 88 to run task
+[2024-06-10T23:29:17.188+0000] {standard_task_runner.py:91} INFO - Job 162: Subtask update_dvc
+[2024-06-10T23:29:17.233+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:195: DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+  SQL_ALCHEMY_CONN = conf.get("database", "SQL_ALCHEMY_CONN")
+
+[2024-06-10T23:29:17.335+0000] {task_command.py:426} INFO - Running <TaskInstance: data_pipeline_v2.update_dvc manual__2024-06-10T22:36:17.950186+00:00 [running]> on host 6963030d8c0b
+[2024-06-10T23:29:17.585+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='sanket' AIRFLOW_CTX_DAG_ID='data_pipeline_v2' AIRFLOW_CTX_TASK_ID='update_dvc' AIRFLOW_CTX_EXECUTION_DATE='2024-06-10T22:36:17.950186+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-06-10T22:36:17.950186+00:00'
+[2024-06-10T23:29:17.592+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2024-06-10T23:29:17.633+0000] {python.py:237} INFO - Done. Returned value was: None
+[2024-06-10T23:29:17.636+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2024-06-10T23:29:17.657+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=data_pipeline_v2, task_id=update_dvc, run_id=manual__2024-06-10T22:36:17.950186+00:00, execution_date=20240610T223617, start_date=20240610T232917, end_date=20240610T232917
+[2024-06-10T23:29:17.729+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2024-06-10T23:29:17.756+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-06-10T23:29:17.763+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

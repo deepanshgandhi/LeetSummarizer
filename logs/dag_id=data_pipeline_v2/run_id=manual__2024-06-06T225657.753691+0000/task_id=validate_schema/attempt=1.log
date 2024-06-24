@@ -1,0 +1,51 @@
+[2024-06-06T22:57:05.873+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2024-06-06T22:57:05.935+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipeline_v2.validate_schema manual__2024-06-06T22:56:57.753691+00:00 [queued]>
+[2024-06-06T22:57:05.958+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipeline_v2.validate_schema manual__2024-06-06T22:56:57.753691+00:00 [queued]>
+[2024-06-06T22:57:05.960+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2024-06-06T22:57:05.993+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): validate_schema> on 2024-06-06 22:56:57.753691+00:00
+[2024-06-06T22:57:06.008+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:61: DeprecationWarning: This process (pid=265) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-06-06T22:57:06.013+0000] {standard_task_runner.py:63} INFO - Started process 267 to run task
+[2024-06-06T22:57:06.012+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline_v2', 'validate_schema', 'manual__2024-06-06T22:56:57.753691+00:00', '--job-id', '67', '--raw', '--subdir', 'DAGS_FOLDER/***.py', '--cfg-path', '/tmp/tmpnxyalr1j']
+[2024-06-06T22:57:06.017+0000] {standard_task_runner.py:91} INFO - Job 67: Subtask validate_schema
+[2024-06-06T22:57:06.042+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:195: DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+  SQL_ALCHEMY_CONN = conf.get("database", "SQL_ALCHEMY_CONN")
+
+[2024-06-06T22:57:06.113+0000] {task_command.py:426} INFO - Running <TaskInstance: data_pipeline_v2.validate_schema manual__2024-06-06T22:56:57.753691+00:00 [running]> on host be153ff008c0
+[2024-06-06T22:57:06.324+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='sanket' AIRFLOW_CTX_DAG_ID='data_pipeline_v2' AIRFLOW_CTX_TASK_ID='validate_schema' AIRFLOW_CTX_EXECUTION_DATE='2024-06-06T22:56:57.753691+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-06-06T22:56:57.753691+00:00'
+[2024-06-06T22:57:06.330+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2024-06-06T22:57:06.332+0000] {logging_mixin.py:188} INFO - An error occurred during schema validation: Validation failed for item at index 0: Missing required keys.
+[2024-06-06T22:57:06.334+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2024-06-06T22:57:06.336+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/opt/airflow/dags/src/data_preprocessing/validate_schema.py", line 15, in validate_schema
+    raise ValueError(f"Validation failed for item at index {idx}: Missing required keys.")
+ValueError: Validation failed for item at index 0: Missing required keys.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/src/data_preprocessing/validate_schema.py", line 28, in validate_schema
+    raise RuntimeError("Failed to validate schema.") from e
+RuntimeError: Failed to validate schema.
+[2024-06-06T22:57:06.383+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=data_pipeline_v2, task_id=validate_schema, run_id=manual__2024-06-06T22:56:57.753691+00:00, execution_date=20240606T225657, start_date=20240606T225705, end_date=20240606T225706
+[2024-06-06T22:57:06.416+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 67 for task validate_schema (Failed to validate schema.; 267)
+[2024-06-06T22:57:06.473+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 1
+[2024-06-06T22:57:06.514+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-06-06T22:57:06.522+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
