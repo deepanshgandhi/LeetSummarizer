@@ -1,11 +1,4 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "Deleting existing contents in GCS bucket..."
-        gsutil -m rm -r gs://airflow-dags-leetsummarizer/*
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
@@ -28,6 +21,16 @@ steps:
         echo "Service account key moved to dags/src/data_preprocessing/service_account_key.json"
         echo "Listing contents of dags/src/data_preprocessing:"
         ls -l dags/src/data_preprocessing
+    
+    - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Copying entire repository to GCS bucket..."
+        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
+        echo "Copy completed. Listing contents of GCS bucket:"
+        gsutil ls -r gs://airflow-dags-leetsummarizer/
 
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '120s'
