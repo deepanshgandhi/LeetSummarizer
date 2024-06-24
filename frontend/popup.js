@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.onMessage.addListener((message) => {
         if (message.type === 'showSubmission') {
             document.getElementById('submittedCode').innerHTML = message.data.submittedCode || 'No code submitted.';
+            document.getElementById('summary').innerHTML = message.data.summary || 'No summary generated.';
             mainPage.style.display = 'none';
             summaryPage.style.display = 'block';
         }

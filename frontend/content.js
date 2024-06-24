@@ -15,12 +15,14 @@ function scrapeLeetCodeData() {
             const description = descriptionElement.innerHTML.trim();
             const problemUrl = window.location.href;
             const user = userElement.href;
+            const question = descriptionElement.textContent.trim();
 
             const scrapedData = {
                 user,
                 title,
                 description,
-                problemUrl
+                problemUrl,
+                question
             };
 
             // Store scraped data in local storage
@@ -65,19 +67,17 @@ function scrapeSubmissionData(retries = 5) {
             data.submittedCode = code;
 
             const postData = {
-                ...data,
-                submittedCode: logCode
+                question: data.question,
+                // userId: data.user,
+                code: logCode
             };
+
+            console.log('Posted code:', postData);
 
             chrome.storage.local.set({ scrapedData: data }, () => {
                 console.log('Submission data stored successfully:', data);
-                // console.log('------------------------------------------------------');
-                // console.log(data);
-                // console.log('------------------------------------------------------');
-                chrome.runtime.sendMessage({ type: 'showSubmission', data });
 
-                // Make the POST request
-                fetch('https://leet-summarizer-server-zznx.vercel.app/upload', {
+                fetch('http://localhost:3000/proxy', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -87,6 +87,12 @@ function scrapeSubmissionData(retries = 5) {
                     .then(response => response.json())
                     .then(responseData => {
                         console.log('POST request successful. Response:', responseData);
+
+                        data.summary = responseData.summary;
+
+                        chrome.storage.local.set({ scrapedData: data }, () => {
+                            chrome.runtime.sendMessage({ type: 'showSubmission', data });
+                        });
                     })
                     .catch(error => {
                         console.error('Error in POST request:', error);

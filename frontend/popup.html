@@ -26,6 +26,16 @@
         #summary-page {
             display: none;
         }
+        pre {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 <body>
@@ -40,6 +50,8 @@
     <div id="summary-page">
         <h1>Submission Data</h1>
         <pre id="submittedCode"></pre>
+        <h2>Summary</h2>
+        <pre id="summary"></pre>
         <button id="back-button">Back</button>
     </div>
     <script src="popup.js"></script>
