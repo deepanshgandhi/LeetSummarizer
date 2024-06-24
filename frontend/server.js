@@ -10,7 +10,7 @@ app.use(cors());
 
 app.post('/proxy', async (req, res) => {
     try {
-        const response = await fetch('https://leet-summarizer-server-zznx.vercel.app/upload', {
+        const response = await fetch('http://34.125.6.114:8000/generate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
