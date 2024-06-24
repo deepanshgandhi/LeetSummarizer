@@ -1,3 +1,5 @@
+/dags/src/firebase_service_account_key.json
+logs/
 firebase_service_account_key.json
 logs/
 __pycache__/
@@ -7,3 +9,4 @@ dags/src/data_preprocessing/service_account_key.json
 data_pipeline/service_account_key.json
 frontend/node_modules
 backend/node_modules
+Scraping/driver
