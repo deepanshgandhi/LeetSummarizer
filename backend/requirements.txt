@@ -1,0 +1,11 @@
+scipy==1.11.4
+cuda-python==12.2.1
+fastapi
+uvicorn[standard]
+transformers==4.41.2
+peft==0.11.1
+unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git
+trl==0.8.6
+accelerate==0.31.0
+bitsandbytes==0.43.1
+xformers==0.0.26.post1
