@@ -6,10 +6,6 @@ steps:
       - |
         echo "Deleting existing contents in GCS bucket..."
         gsutil -m rm -r gs://airflow-dags-leetsummarizer/*
-        echo "Copying entire repository to GCS bucket..."
-        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
-        echo "Copy completed. Listing contents of GCS bucket:"
-        gsutil ls -r gs://airflow-dags-leetsummarizer/
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
