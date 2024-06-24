@@ -1,0 +1,1 @@
+[2024-06-06T22:31:10.744+0000] {task_context_logger.py:104} ERROR - Executor reports task instance <TaskInstance: data_pipline_v2.load_data manual__2024-06-06T22:31:06.097675+00:00 [queued]> finished (failed) although the task says it's queued. (Info: None) Was the task killed externally?

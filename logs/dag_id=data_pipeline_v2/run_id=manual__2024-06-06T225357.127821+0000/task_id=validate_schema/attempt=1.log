@@ -1,0 +1,25 @@
+[2024-06-06T22:54:06.672+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2024-06-06T22:54:06.714+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipeline_v2.validate_schema manual__2024-06-06T22:53:57.127821+00:00 [queued]>
+[2024-06-06T22:54:06.732+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipeline_v2.validate_schema manual__2024-06-06T22:53:57.127821+00:00 [queued]>
+[2024-06-06T22:54:06.734+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2024-06-06T22:54:06.763+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): validate_schema> on 2024-06-06 22:53:57.127821+00:00
+[2024-06-06T22:54:06.782+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:61: DeprecationWarning: This process (pid=241) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-06-06T22:54:06.787+0000] {standard_task_runner.py:63} INFO - Started process 243 to run task
+[2024-06-06T22:54:06.787+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline_v2', 'validate_schema', 'manual__2024-06-06T22:53:57.127821+00:00', '--job-id', '65', '--raw', '--subdir', 'DAGS_FOLDER/***.py', '--cfg-path', '/tmp/tmpzly845gy']
+[2024-06-06T22:54:06.797+0000] {standard_task_runner.py:91} INFO - Job 65: Subtask validate_schema
+[2024-06-06T22:54:06.830+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:195: DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+  SQL_ALCHEMY_CONN = conf.get("database", "SQL_ALCHEMY_CONN")
+
+[2024-06-06T22:54:06.910+0000] {task_command.py:426} INFO - Running <TaskInstance: data_pipeline_v2.validate_schema manual__2024-06-06T22:53:57.127821+00:00 [running]> on host be153ff008c0
+[2024-06-06T22:54:07.084+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='sanket' AIRFLOW_CTX_DAG_ID='data_pipeline_v2' AIRFLOW_CTX_TASK_ID='validate_schema' AIRFLOW_CTX_EXECUTION_DATE='2024-06-06T22:53:57.127821+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-06-06T22:53:57.127821+00:00'
+[2024-06-06T22:54:07.088+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2024-06-06T22:54:07.090+0000] {logging_mixin.py:188} INFO - {'Plain Text': "Use hashing. Go through the list of numbers, remember each number's position in a dictionary. For each number, check if the difference between the target and the current number exists in the dictionary. If it does, we've found the pair that adds up to the target, return their indices.", 'Code': 'class Solution:\r\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\r\n        prevMap = {}  # val -> index\r\n\r\n        for i, n in enumerate(nums):\r\n            diff = target - n\r\n            if diff in prevMap:\r\n                return [prevMap[diff], i]\r\n            prevMap[n] = i', 'Question': 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\r\n\r\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\r\n\r\nYou can return the answer in any order.\r\n\r\n \r\n\r\nExample 1:\r\n\r\nInput: nums = [2,7,11,15], target = 9\r\nOutput: [0,1]\r\nExplanation: Because nums[0] + nums[1] == 9, we return [0, 1].'}
+[2024-06-06T22:54:07.092+0000] {logging_mixin.py:188} INFO - Validation failed for item at index 0: Missing required keys.
+[2024-06-06T22:54:07.093+0000] {python.py:237} INFO - Done. Returned value was: False
+[2024-06-06T22:54:07.094+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2024-06-06T22:54:07.141+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=data_pipeline_v2, task_id=validate_schema, run_id=manual__2024-06-06T22:53:57.127821+00:00, execution_date=20240606T225357, start_date=20240606T225406, end_date=20240606T225407
+[2024-06-06T22:54:07.208+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2024-06-06T22:54:07.263+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-06-06T22:54:07.271+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

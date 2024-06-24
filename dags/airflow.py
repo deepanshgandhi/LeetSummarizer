@@ -114,7 +114,17 @@ dag.on_failure_callback = handle_failure
 
 
 
+# task_validate_code = PythonOperator(
+#     task_id='validate_code',
+#     python_callable=validate_code,
+#     dag=dag,
+# )
 
+# task_validate_schema = PythonOperator(
+#     task_id='validate_schema',
+#     python_callable=validate_schema,
+#     dag=dag,
+# )
 
 
 

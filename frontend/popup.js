@@ -1,36 +1,47 @@
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded and parsed');
+document.addEventListener('DOMContentLoaded', () => {
+    const mainPage = document.getElementById('main-page');
+    const summaryPage = document.getElementById('summary-page');
+    const generateSummaryButton = document.getElementById('generate-summary');
+    const backButton = document.getElementById('back-button');
 
-    // Dummy Questions
-    const questions = [
-        { id: 1, title: 'Two Sum', summary: 'Find two numbers that add up to a target value.' },
-        { id: 2, title: 'Add Two Numbers', summary: 'Add two numbers represented by linked lists.' },
-    ];
+    // Fetch data from local storage and display in the popup
+    chrome.storage.local.get(['scrapedData'], (result) => {
+        const data = result.scrapedData || {};
+        document.getElementById('title').textContent = data.title || 'N/A';
+        document.getElementById('description').innerHTML = data.description || 'N/A';
+        document.getElementById('problemUrl').textContent = data.problemUrl || 'N/A';
+        document.getElementById('user').textContent = data.user || 'N/A';
 
-    const questionsList = document.getElementById('questions-list');
-    const summaryPopup = document.getElementById('summary-popup');
-    const summaryContent = document.getElementById('summary-content');
-    const closeSummaryButton = document.getElementById('close-summary');
-
-    console.log('questions:', questions);
-
-    if (!questionsList) {
-        console.error('questions-list element not found');
-        return;
-    }
-
-    questions.forEach(question => {
-        const listItem = document.createElement('li');
-        listItem.textContent = question.title;
-        listItem.dataset.summary = question.summary;
-        listItem.addEventListener('click', function() {
-            summaryContent.textContent = this.dataset.summary;
-            summaryPopup.classList.add('visible');
-        });
-        questionsList.appendChild(listItem);
+        // Enable the "Generate Summary" button only if the URL is a problem page
+        if (data.problemUrl && data.problemUrl.includes('/description/')) {
+            generateSummaryButton.disabled = false;
+        } else {
+            generateSummaryButton.disabled = true;
+        }
     });
 
-    closeSummaryButton.addEventListener('click', function() {
-        summaryPopup.classList.remove('visible');
+    // Add click event listener to "Generate Summary" button
+    generateSummaryButton.addEventListener('click', () => {
+        chrome.storage.local.get(['scrapedData'], () => {
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, { type: 'scrapeSubmission' });
+            });
+        });
+    });
+
+    // Add click event listener to "Back" button
+    backButton.addEventListener('click', () => {
+        summaryPage.style.display = 'none';
+        mainPage.style.display = 'block';
+    });
+
+    // Listen for messages from content script to update the UI with submission data
+    chrome.runtime.onMessage.addListener((message) => {
+        if (message.type === 'showSubmission') {
+            document.getElementById('submittedCode').innerHTML = message.data.submittedCode || 'No code submitted.';
+            document.getElementById('summary').innerHTML = message.data.summary || 'No summary generated.';
+            mainPage.style.display = 'none';
+            summaryPage.style.display = 'block';
+        }
     });
 });

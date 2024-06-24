@@ -1,21 +1,9 @@
-# Dockerfile
+FROM node:alpine
 
-FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
+WORKDIR /usr/src/app
+copy package*.json ./
+RUN npm install
 
-WORKDIR /app
-
-RUN apt-get update
-RUN apt-get install -y curl git software-properties-common
-
-# Install requirements
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
-
-# Copy the FastAPI application
-COPY main.py /app/main.py
-
-
-# Expose the port
-EXPOSE 8000
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]

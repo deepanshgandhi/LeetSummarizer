@@ -1,19 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>LeetCode Summarizer</title>
-    <link rel="stylesheet" href="popup.css">
+    <title>LeetCode Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+        }
+        #generate-summary {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #back-button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #summary-page {
+            display: none;
+        }
+        pre {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
-<div id="container">
-    <h1>LeetCode Summarizer</h1>
-    <ul id="questions-list"></ul>
-    <div id="summary-popup" class="hidden">
-        <button id="close-summary">Close</button>
-        <div id="summary-content"></div>
+    <div id="main-page">
+        <h1>LeetCode Problem Data</h1>
+        <p><strong>Title:</strong> <span id="title"></span></p>
+        <p><strong>Description:</strong> <div id="description"></div></p>
+        <p><strong>Problem URL:</strong> <span id="problemUrl"></span></p>
+        <p><strong>User:</strong> <span id="user"></span></p>
+        <button id="generate-summary" disabled>Generate Summary</button>
     </div>
-</div>
-<script src="popup.js"></script>
+    <div id="summary-page">
+        <h1>Submission Data</h1>
+        <pre id="submittedCode"></pre>
+        <h2>Summary</h2>
+        <pre id="summary"></pre>
+        <button id="back-button">Back</button>
+    </div>
+    <script src="popup.js"></script>
 </body>
 </html>
