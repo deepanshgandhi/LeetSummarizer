@@ -55,7 +55,7 @@ def main():
     with open('Scraping/problemset.csv', mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(["Title", "URL", "Acceptance", "Difficulty", "Description"])
-
+        print("Here")
         for i in range(1, 2):
             url = PROBLEMSET_BASE_URL + str(i)
             print("processing page: " + url)
