@@ -16,9 +16,8 @@ from io import BytesIO
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
-driver_path = "C:/Users/sanke/Desktop/MLOps/LeetSummarizer/Scraping/driver/chromedriver-win64/chromedriver.exe"
-
-chrome_service = Service(driver_path)
+driver_path = "Scraping/driver/chromedriver"
+chrome_service = Service(executable_path=driver_path)
 driver = webdriver.Chrome(service=chrome_service)
 
 PROBLEMSET_BASE_URL = "https://leetcode.com/problemset/all/?page="
@@ -48,11 +47,12 @@ def get_problem_description(url):
 
 def main():
     problemset = []
-    if os.path.exists("problemset.json"):
-        with open('problemset.json', 'r') as f:
+
+    if os.path.exists("Scraping/problemset.json"):
+        with open('Scraping/problemset.json', 'r') as f:
             problemset = json.load(f)
 
-    with open('problemset.csv', mode='w', newline='', encoding='utf-8') as file:
+    with open('Scraping/problemset.csv', mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(["Title", "URL", "Acceptance", "Difficulty", "Description"])
         print("Here")
@@ -92,7 +92,7 @@ def main():
                 writer.writerow([problem["title"], problem["url"], problem["Acceptance"], problem["difficulty"], problem["description"]])
 
     driver.quit()
-    with open('problemset.json', 'w') as f:
+    with open('Scraping/problemset.json', 'w') as f:
         json.dump(problemset, f)
 
 main()
