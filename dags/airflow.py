@@ -1,28 +1,41 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
+from airflow.utils.dates import days_ago
 from src.data_preprocessing.load_data import load_data
 from src.data_preprocessing.handle_comments import remove_comments
 from src.data_preprocessing.validate_code import validate_code
 from src.data_preprocessing.validate_schema import validate_schema
 from src.data_preprocessing.print_final_data import print_final_data
 from src.data_preprocessing.dvc_pipeline import fetch_and_track_data
+from src.data_preprocessing.success_email import send_success_email
+from src.data_preprocessing.failure_email import send_failure_email
 
 default_args = {
-    'owner': 'sanket',
-    'start_date': datetime(2024, 5, 18),
+    'owner': 'rahul',
+    'depends_on_past': False,
+    'start_date': days_ago(1),
+    'email_on_failure': False,
+    'email_on_retry': False,
     'retries': 0,
     'retry_delay': timedelta(minutes=5),
 }
 
+# Function to handle failur
 def handle_failure(context):
     task_instance = context['task_instance']
     exception = task_instance.exception
     # Log or handle the exception as needed
     print(f"Task {task_instance.task_id} failed with exception: {exception}")
+    try:
+        send_failure_email(task_instance, exception)
+        print("Failure email sent successfully!")
+    except Exception as e:
+        print(f"Error sending failure email: {e}")
 
+# Define the DAG
 dag = DAG(
-    'data_pipeline_v2',
+    'data_pipeline_v3',
     default_args=default_args,
     description='LeetSummarizer Data Pipeline',
     schedule_interval=None,
@@ -32,6 +45,7 @@ dag = DAG(
 task_load_data = PythonOperator(
     task_id='load_data',
     python_callable=load_data,
+    provide_context=True,
     dag=dag,
 )
 
@@ -61,26 +75,57 @@ task_validate_code = PythonOperator(
 
 task_print_final_data = PythonOperator(
     task_id='print_data',
-    python_callable=print,
+    python_callable=print_final_data,
     op_args=[task_validate_code.output],
+    op_kwargs={
+            'bucket_name': 'airflow-dags-leetsummarizer',
+            'destination_blob_name': 'dags/data/preprocessed_data.json'
+        },
     provide_context=True,
     dag=dag,
 )
 
 task_dvc_pipeline = PythonOperator(
     task_id='update_dvc',
-    python_callable=print,
+    python_callable=fetch_and_track_data,
     provide_context=True,
     dag=dag,
 )
 
+task_send_email = PythonOperator(
+    task_id='task_send_email',
+    python_callable=send_success_email,
+    provide_context = True,
+    dag=dag,
+)
 
-
-#Set up email notifications for success and failure
+# Set up task dependencies
 task_load_data >> task_validate_schema
 task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
+task_dvc_pipeline >> task_send_email
 
+# Set up the failure callback
 dag.on_failure_callback = handle_failure
+
+
+
+
+
+# task_validate_code = PythonOperator(
+#     task_id='validate_code',
+#     python_callable=validate_code,
+#     dag=dag,
+# )
+
+# task_validate_schema = PythonOperator(
+#     task_id='validate_schema',
+#     python_callable=validate_schema,
+#     dag=dag,
+# )
+
+
+
+

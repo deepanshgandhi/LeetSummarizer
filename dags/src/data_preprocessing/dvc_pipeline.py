@@ -1,7 +1,6 @@
 import subprocess
 import os
 
-
 def fetch_and_track_data() -> None:
     try:
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "service_account_key.json"
