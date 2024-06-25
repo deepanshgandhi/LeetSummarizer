@@ -37,12 +37,12 @@ jobs:
 
       - name: "Build Docker image"
         run: |
-          docker build -t us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
+          docker build -t gcr.io/leetsummarizer/model-training:latest --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
 
       - name: "Push Docker image to registry"
         run: |
-          docker push us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest
-
+          docker push gcr.io/leetsummarizer/model-training:latest
+          
       - name: "Remove service account key"
         run: |
           rm ./leetsummarizer-4eccb62456a1.json
