@@ -1,4 +1,20 @@
 steps:
+  # Step 1: Clone the repository
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        git clone https://github.com/deepanshgandhi/LeetSummarizer.git
+
+  # Step 2: Copy files to the GCS bucket
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gsutil -m cp -r LeetSummarizer/* gs://airflow-dags-leetsummarizer/
+  
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
@@ -21,15 +37,5 @@ steps:
         echo "Listing contents of dags/src/data_preprocessing:"
         ls -l dags/src/data_preprocessing
 
-  - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "Copying entire repository to GCS bucket..."
-        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
-        echo "Copy completed. Listing contents of GCS bucket:"
-        gsutil ls -r gs://airflow-dags-leetsummarizer/
-
 logsBucket: 'gs://airflow-dag-logs/'
-timeout: '120s'
+timeout: '300s'
