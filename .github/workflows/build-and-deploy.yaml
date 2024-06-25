@@ -43,6 +43,7 @@ jobs:
         run: |
           docker push us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training
 
+
       - name: "Remove service account key"
         run: |
           rm ./leetsummarizer-4eccb62456a1.json
