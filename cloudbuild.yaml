@@ -26,9 +26,12 @@ steps:
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['cp', '/workspace/firestore-service-account-key.json', 'gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/service_account_key.json']
 
-  # Step 4: Sync code to the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['rsync', '-r', '--exclude', 'logs/scheduler/latest', '.', 'gs://airflow-dags-leetsummarizer']
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gsutil -m rsync -r --exclude 'logs/scheduler/latest' . gs://airflow-dags-l
 
 
 logsBucket: 'gs://airflow-dag-logs/'
