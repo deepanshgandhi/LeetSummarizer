@@ -1,0 +1,24 @@
+steps:
+  # Step 1: Fetch service account key from Secret Manager
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud secrets versions access latest --secret=service_account_key --project=leetsummarizer > /workspace/service_account_key.json
+
+  # Step 2: Ensure the directory exists in the GCS bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gsutil ls gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing || gsutil mb -p leetsummarizer -b on gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing
+
+  # Step 3: Move service account key to the desired location
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', '/workspace/service_account_key.json', 'gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/service_account_key.json']
+
+  # Step 4: Sync code to the GCS bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer']
