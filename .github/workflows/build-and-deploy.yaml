@@ -8,42 +8,41 @@ env:
   PROJECT_ID: leetsummarizer
   REGION: us-central1
 
-job:
+jobs:
   build-push-artifact:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: actions/checkout@v3
 
-      - id: "auth"
-        uses: "google-github-actions/auth@v1"
+      - name: "Authenticate with Google Cloud"
+        uses: google-github-actions/auth@v1
         with:
-          credentials_json: "${{ secrets.GCP_BUCKET_KEY }}"
+          credentials_json: ${{ secrets.GCP_BUCKET_KEY }}
 
       - name: "Set up Cloud SDK"
-        uses: "google-github-actions/setup-gcloud@v1"
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: "Use gcloud CLI"
-        run: "gcloud info"
+        run: gcloud info
 
-      - name: "Docker auth"
-        run: |-
+      - name: "Configure Docker authentication"
+        run: |
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
-      - name: Decrypt and set Google Cloud service account key
+      - name: "Decrypt and set Google Cloud service account key"
         run: |
           echo "${{ secrets.GCP_BUCKET_KEY }}" > ./leetsummarizer-4eccb62456a1.json
           export GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json
 
-      - name: Build Docker image
+      - name: "Build Docker image"
         run: |
           docker build -t us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
-      
-      - name: Push Docker image to registry
+
+      - name: "Push Docker image to registry"
         run: |
           docker push us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest
 
-      # Clean up
-      - name: Remove service account key
+      - name: "Remove service account key"
         run: |
           rm ./leetsummarizer-4eccb62456a1.json
