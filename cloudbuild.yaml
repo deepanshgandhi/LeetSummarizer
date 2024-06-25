@@ -31,7 +31,7 @@ steps:
   args:
     - '-c'
     - |
-      gsutil -m rsync -r --exclude 'logs/scheduler/latest' . gs://airflow-dags-l
+      gsutil -m rsync -r --exclude 'logs/scheduler/latest' . gs://airflow-dags-leetsummarizer
 
 
 logsBucket: 'gs://airflow-dag-logs/'
