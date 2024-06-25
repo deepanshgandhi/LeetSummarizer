@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t deepanshgandhi/leet-modeltraining:v1 --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json /model/
+          docker build -t deepanshgandhi/leet-modeltraining:v1 --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
       
       - name: Push Docker image to registry
         run: |
