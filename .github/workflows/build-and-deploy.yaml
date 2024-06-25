@@ -35,14 +35,15 @@ jobs:
           echo "${{ secrets.GCP_BUCKET_KEY }}" > ./leetsummarizer-4eccb62456a1.json
           export GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json
 
-      - name: "Build Docker image"
+      - name: "Build Docker images"
         run: |
-          docker build -t us-docker.pkg.dev/leetsummarizer/gcr.io/model-training --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
+          docker build -t us-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
+          docker build -t us-docker.pkg.dev/leetsummarizer/gcr.io/fastapi-gpu-app:latest model_endpoint/
 
       - name: "Push Docker image to registry"
         run: |
-          docker push us-docker.pkg.dev/leetsummarizer/gcr.io/model-training
-
+          docker push us-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest
+          docker push us-docker.pkg.dev/leetsummarizer/gcr.io/fastapi-gpu-app:latest
 
       - name: "Remove service account key"
         run: |
