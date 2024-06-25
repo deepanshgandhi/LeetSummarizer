@@ -20,6 +20,7 @@ jobs:
         project_id: leetsummarizer
         service_account_key: ${{ secrets.GCP_SA_KEY }}
     
+    
     - name: Sync to GCS
       run: |
         gsutil -m rsync -r ./ gs://airflow-dags-leetsummarizer
