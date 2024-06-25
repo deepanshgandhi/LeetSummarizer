@@ -6,13 +6,13 @@ steps:
     args:
       - '-c'
       - |
-        if [ -d "your-repository" ]; then
+        if [ -d "LeetSummarizer" ]; then
           echo "Repository directory exists. Deleting..."
-          rm -rf your-repository
+          rm -rf LeetSummarizer
         else
           echo "Repository directory does not exist. No need to delete."
         fi
-        
+
   # Step 1: Clone the repository
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: 'bash'
