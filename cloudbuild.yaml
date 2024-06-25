@@ -15,6 +15,7 @@ steps:
       - |
         gsutil ls gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing || gsutil mb -p leetsummarizer -b on gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing
 
+
   # Step 3: Move service account key to the desired location
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['cp', '/workspace/service_account_key.json', 'gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/service_account_key.json']
