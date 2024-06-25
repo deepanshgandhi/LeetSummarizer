@@ -1,0 +1,27 @@
+# Dockerfile
+
+FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
+
+WORKDIR /app
+
+RUN apt-get update
+RUN apt-get install -y curl git software-properties-common
+RUN apt-get install build-essential -y
+
+#COPY leetsummarizer-4eccb62456a1.json /app/leetsummarizer-4eccb62456a1.json
+
+# Set the environment variable for Google Cloud SDK to use the key file
+#ENV GOOGLE_APPLICATION_CREDENTIALS=/app/leetsummarizer-4eccb62456a1.json
+
+
+# Set the environment variable for Google Cloud SDK to use the key file
+ARG GOOGLE_APPLICATION_CREDENTIALS
+ENV GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+
+# Install requirements
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+COPY train.py /app/train.py
+
+CMD ["python", "train.py"]

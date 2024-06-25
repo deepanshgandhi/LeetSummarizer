@@ -1,0 +1,22 @@
+torch
+scipy==1.11.4
+sklearn-pandas==2.2.0
+scikit-learn==1.2.2
+cuda-python==12.2.1
+transformers==4.41.2
+matplotlib==3.7.1
+matplotlib-inline==0.1.7
+peft==0.11.1
+unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git
+trl==0.8.6
+accelerate==0.31.0
+bitsandbytes==0.43.1
+xformers==0.0.26.post1
+datasets==2.20.0
+sentencepiece==0.1.99
+xxhash==3.4.1
+openpyxl==3.1.4
+huggingface_hub
+rouge-score
+sentence-transformers
+google-cloud-storage==2.8.0

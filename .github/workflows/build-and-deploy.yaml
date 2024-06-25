@@ -1,0 +1,35 @@
+name: Build and Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Decrypt and set Google Cloud service account key
+        run: |
+          echo "${{ secrets.GCP_BUCKET_KEY }}" > ./leetsummarizer-4eccb62456a1.json
+          export GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json
+
+      - name: Build Docker image
+        run: |
+          docker build -t deepanshgandhi/leet-modeltraining:v1 --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json /model/
+      
+      - name: Push Docker image to registry
+        run: |
+          docker push deepanshgandhi/leet-modeltraining:v1
+
+      # Clean up
+      - name: Remove service account key
+        run: |
+          rm ./leetsummarizer-4eccb62456a1.json
