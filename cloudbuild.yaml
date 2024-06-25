@@ -4,21 +4,15 @@ steps:
     args:
       - '-c'
       - |
-        echo "Retrieving service account key from Secret Manager..."
         gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service_account_key.json
-        echo "Service account key retrieved and saved to /workspace/service_account_key.json"
 
   - name: 'ubuntu'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo "Creating necessary directories..."
         mkdir -p dags/src/data_preprocessing
-        echo "Moving service account key to dags/src/data_preprocessing..."
         mv /workspace/service_account_key.json dags/src/data_preprocessing/service_account_key.json
-        echo "Service account key moved to dags/src/data_preprocessing/service_account_key.json"
-        echo "Listing contents of dags/src/data_preprocessing:"
         ls -l dags/src/data_preprocessing
 
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -26,9 +20,7 @@ steps:
     args:
       - '-c'
       - |
-        echo "Copying entire repository to GCS bucket..."
         gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
-        echo "Copy completed. Listing contents of GCS bucket:"
         gsutil ls -r gs://airflow-dags-leetsummarizer/
 
 logsBucket: 'gs://airflow-dag-logs/'
