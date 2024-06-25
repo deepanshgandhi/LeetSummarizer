@@ -8,14 +8,20 @@ steps:
         gcloud secrets versions access latest --secret=firestore-service-account-key --project=leetsummarizer > /workspace/firestore-service-account-key.json
 
 
-  # Step 2: Ensure the directory exists in the GCS bucket
+# Step 2: Ensure the directory exists in the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gsutil ls gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing || gsutil mb -p leetsummarizer -b on gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing
-
+        # Check if the directory exists
+        if gsutil ls gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/; then
+          echo "Directory exists."
+        else
+          # Create the directory if it doesn't exist
+          gsutil mb -p leetsummarizer gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing
+          echo "Directory created."
+        fi
 
   # Step 3: Move service account key to the desired location
   - name: 'gcr.io/cloud-builders/gsutil'
