@@ -27,11 +27,7 @@ steps:
     args: ['cp', '/workspace/firestore-service-account-key.json', 'gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/service_account_key.json']
 
   - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gsutil -m rsync -r --exclude 'logs/scheduler/latest' . gs://airflow-dags-leetsummarizer
+    args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer']
 
 
 logsBucket: 'gs://airflow-dag-logs/'
