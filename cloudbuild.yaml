@@ -22,3 +22,7 @@ steps:
   # Step 4: Sync code to the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer']
+
+# Optional: Define any substitutions if necessary
+substitutions:
+  _BUCKET_NAME: 'airflow-dags-leetsummarizer'
