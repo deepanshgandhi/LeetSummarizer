@@ -28,7 +28,7 @@ jobs:
 
       - name: "Configure Docker authentication"
         run: |
-          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+          gcloud auth configure-docker us-docker.pkg.dev
 
       - name: "Decrypt and set Google Cloud service account key"
         run: |
