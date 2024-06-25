@@ -1,12 +1,11 @@
 steps:
   # Step 1: Fetch service account key from Secret Manager
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service_account_key.json
-
+        gcloud secrets versions access latest --secret=firestore-service-account-key --project=leetsummarizer > /workspace/firestore-service-account-key.json
 
   # Step 2: Ensure the directory exists in the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
