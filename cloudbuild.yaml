@@ -28,7 +28,7 @@ steps:
 
   # Step 4: Sync code to the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['rsync', '-r', './logs/scheduler/latest', 'gs://airflow-dags-leetsummarizer/logs/scheduler/latest']
+    args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer']
 
 logsBucket: 'gs://airflow-dag-logs/'
 timeout: '180s'
