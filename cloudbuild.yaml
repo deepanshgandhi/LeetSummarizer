@@ -30,6 +30,5 @@ steps:
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['rsync', '-r', './logs/scheduler/latest', 'gs://airflow-dags-leetsummarizer/logs/scheduler/latest']
 
-# Optional: Define any substitutions if necessary
-substitutions:
-  _BUCKET_NAME: 'airflow-dags-leetsummarizer'
+logsBucket: 'gs://airflow-dag-logs/'
+timeout: '180s'
