@@ -28,7 +28,7 @@ jobs:
 
       - name: "Configure Docker authentication"
         run: |
-          gcloud auth configure-docker us-docker.pkg.dev
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: "Decrypt and set Google Cloud service account key"
         run: |
@@ -37,12 +37,12 @@ jobs:
 
       - name: "Build Docker image"
         run: |
-          docker build -t gcr.io/leetsummarizer/model-training:latest --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
+          docker build -t us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training --build-arg GOOGLE_APPLICATION_CREDENTIALS=./leetsummarizer-4eccb62456a1.json model_training/
 
       - name: "Push Docker image to registry"
         run: |
-          docker push gcr.io/leetsummarizer/model-training:latest
-          
+          docker push us-central1-docker.pkg.dev/leetsummarizer/gcr.io/model-training
+
       - name: "Remove service account key"
         run: |
           rm ./leetsummarizer-4eccb62456a1.json
