@@ -1,35 +1,35 @@
 steps:
-  # Step 1: Fetch service account key from Secret Manager
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud secrets versions access latest --secret=firestore-service-account-key --project=leetsummarizer > /workspace/firestore-service-account-key.json
+        echo "Retrieving service account key from Secret Manager..."
+        gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service_account_key.json
+        echo "Service account key retrieved and saved to /workspace/service_account_key.json"
 
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Creating necessary directories..."
+        mkdir -p dags/src/data_preprocessing
+        echo "Moving service account key to dags/src/data_preprocessing..."
+        mv /workspace/service_account_key.json dags/src/data_preprocessing/service_account_key.json
+        echo "Service account key moved to dags/src/data_preprocessing/service_account_key.json"
+        echo "Listing contents of dags/src/data_preprocessing:"
+        ls -l dags/src/data_preprocessing
 
-# Step 2: Ensure the directory exists in the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        # Check if the directory exists
-        if gsutil ls gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/; then
-          echo "Directory exists."
-        else
-          # Create the directory if it doesn't exist
-          gsutil mb -p leetsummarizer gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing
-          echo "Directory created."
-        fi
-
-  # Step 3: Move service account key to the desired location
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['cp', '/workspace/firestore-service-account-key.json', 'gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/service_account_key.json']
-
-  # Step 4: Sync code to the GCS bucket
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['rsync', '-r', '.', 'gs://airflow-dags-leetsummarizer']
+        echo "Copying entire repository to GCS bucket..."
+        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
+        echo "Copy completed. Listing contents of GCS bucket:"
+        gsutil ls -r gs://airflow-dags-leetsummarizer/
 
 logsBucket: 'gs://airflow-dag-logs/'
-timeout: '200s'
+timeout: '120s'
