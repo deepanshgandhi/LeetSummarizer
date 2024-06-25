@@ -1,27 +1,35 @@
 steps:
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Step 1: Fetch Firestore service account key from Secret Manager
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud secrets versions access latest --secret=firestore-service-account-key > /workspace/service_account_key.json
+        gcloud secrets versions access latest --secret=firestore-service-account-key --project=leetsummarizer > /workspace/firestore-service-account-key.json
 
-  - name: 'ubuntu'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        mkdir -p dags/src/data_preprocessing
-        mv /workspace/service_account_key.json dags/src/data_preprocessing/service_account_key.json
-        ls -l dags/src/data_preprocessing
-
+  # Step 2: Ensure the directory exists in the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gsutil -m cp -r . gs://airflow-dags-leetsummarizer/
-        gsutil ls -r gs://airflow-dags-leetsummarizer/
+        # Check if the directory exists
+        if gsutil ls gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/; then
+          echo "Directory exists."
+        else
+          # Create the directory if it doesn't exist
+          gsutil mb -p leetsummarizer gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing
+          echo "Directory created."
+        fi
 
-logsBucket: 'gs://airflow-dag-logs/'
-timeout: '120s'
+  # Step 3: Move Firestore service account key to the desired location
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', '/workspace/firestore-service-account-key.json', 'gs://airflow-dags-leetsummarizer/dags/src/data_preprocessing/service_account_key.json']
+
+  # Step 4: Sync code to the GCS bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', './logs/scheduler/latest', 'gs://airflow-dags-leetsummarizer/logs/scheduler/latest']
+
+# Optional: Define any substitutions if necessary
+substitutions:
+  _BUCKET_NAME: 'airflow-dags-leetsummarizer'
