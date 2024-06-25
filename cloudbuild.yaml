@@ -5,7 +5,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud secrets versions access latest --secret=service_account_key --project=leetsummarizer > /workspace/service_account_key.json
+        gcloud secrets versions access latest --secret=firestore-service-account-key --project=leetsummarizer > /workspace/service_account_key.json
 
   # Step 2: Ensure the directory exists in the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
