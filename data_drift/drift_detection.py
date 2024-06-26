@@ -3,7 +3,7 @@ from load_data_from_firestore import load_data
 from code_complexity import calculate_cyclomatic_complexity
 from compare_complexities import extract_code_and_calculate_avg
 
-def detect_drift(avg_complexity_1: float, avg_complexity_2: float, threshold: float = 1.0) -> bool:
+def detect_drift(avg_complexity_1: float, avg_complexity_2: float, threshold: float = 4.0) -> bool:
     """
     Detect drift between two average complexities.
 
