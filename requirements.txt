@@ -19,3 +19,5 @@ webdriver-manager==3.8.3
 xformers --no-deps
 google-cloud-bigquery
 elasticsearch
+google-cloud-firestore
+google-cloud-monitoring
