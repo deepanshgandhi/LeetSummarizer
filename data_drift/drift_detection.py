@@ -19,7 +19,7 @@ def detect_drift(avg_complexity_1: float, avg_complexity_2: float, threshold: fl
     print(f"Drift detected: {drift} (Threshold: {threshold})")
     return drift > threshold
 
-def compare_complexities_and_detect_drift(collection1: str, collection2: str, field1: str, field2: str, threshold: float = 1.0) -> Tuple[float, float, bool]:
+def compare_complexities_and_detect_drift(collection1: str, collection2: str, field1: str, field2: str, threshold: float = 4.0) -> Tuple[float, float, bool]:
     """
     Compare the complexities of two Firestore collections and detect drift.
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     collection2 = 'Training_data'
     field1 = 'code'  # Field name for code snippets in 'Questions' collection
     field2 = 'Code'  # Field name for code snippets in 'Training_data' collection
-    threshold = 1.0  # Define your threshold for detecting significant drift
+    threshold = 4.0  # Define your threshold for detecting significant drift
 
     avg_complexity_1, avg_complexity_2, drift_detected = compare_complexities_and_detect_drift(collection1, collection2, field1, field2, threshold)
     print(f"Average Complexity - {collection1}: {avg_complexity_1}")
