@@ -1,6 +1,7 @@
 from unsloth import FastLanguageModel
 import torch
 import pandas as pd
+import numpy as np
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
 from trl import SFTTrainer
@@ -15,6 +16,8 @@ import json
 import os, joblib, logging, argparse
 from huggingface_hub import HfApi, HfFolder
 
+import mlflow
+
 max_seq_length = 2048
 per_device_train_batch_size = 2
 gradient_accumulation_steps = 4
@@ -22,6 +25,7 @@ warmup_steps = 5
 max_steps = 15
 bucket_name = 'airflow-dags-leetsummarizer'
 data_file_path = 'dags/data/preprocessed_data.json'
+
 
 def load_data_from_gcs(bucket_name, file_path):
     """Load JSON data from Google Cloud Storage
@@ -47,6 +51,7 @@ def load_data_from_gcs(bucket_name, file_path):
 
     return json_data
 
+
 def upload_to_gcs(source_file_name, bucket_name, destination_blob_name):
     """Uploads a file to Google Cloud Storage.
 
@@ -67,6 +72,7 @@ def upload_to_gcs(source_file_name, bucket_name, destination_blob_name):
     # Upload the file to GCS
     blob.upload_from_filename(source_file_name)
 
+
 def load_model_tokenizer():
     """Load the model and tokenizer from Hugging Face Hub"""
     dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
@@ -79,6 +85,7 @@ def load_model_tokenizer():
         load_in_4bit = load_in_4bit
     )
     return model, tokenizer
+
 
 def load_peft_model(model):
     """Load the model with PEFT configuration"""
@@ -96,6 +103,7 @@ def load_peft_model(model):
         loftq_config = None,
     )
     return model
+
 
 def prepare_data(tokenizer):
     """Prepare the data for training"""
@@ -119,6 +127,8 @@ def prepare_data(tokenizer):
     custom_ds["text"] = train_df["Question"]
     dataset = Dataset.from_pandas(custom_ds)
     return dataset, test_df, prompt
+
+
 def train_model(model, tokenizer, train_data, test_df, prompt):
     """
     Train the model
@@ -168,7 +178,8 @@ def train_model(model, tokenizer, train_data, test_df, prompt):
     plt.savefig('/tmp/training_loss.png')
     destination_blob_name = 'dags/data/training_loss.png'
     upload_to_gcs('/tmp/training_loss.png', bucket_name, destination_blob_name)
-    return trainer_stats, trainer
+    return trainer_stats, trainer, loss_values[-1]
+
 
 def evaluate_model(model, test_df, prompt, tokenizer):
     similarity_model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
@@ -217,6 +228,7 @@ def evaluate_model(model, test_df, prompt, tokenizer):
 
             similarity = util.pytorch_cos_sim(embeddings1, embeddings2)
             similarity_values.append(similarity.item())
+    
     # Plot the ROUGE-L scores and similarity scores and save in bucket airflow-dags-leetsummarizer
     plt.figure(figsize=(10, 5))
     plt.plot(roguel_values, label='ROUGE-L Score')
@@ -240,6 +252,7 @@ def evaluate_model(model, test_df, prompt, tokenizer):
     upload_to_gcs('/tmp/similarity_score.png', bucket_name, destination_blob_name)
     return roguel_values, similarity_values
 
+
 def push_model_huggingface(trainer):
     api_token = "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"
     HfFolder.save_token(api_token)
@@ -248,6 +261,55 @@ def push_model_huggingface(trainer):
 model, tokenizer = load_model_tokenizer()
 model = load_peft_model(model)
 dataset, test_df, prompt = prepare_data(tokenizer)
-trainer_stats, trainer = train_model(model, tokenizer, dataset, test_df, prompt)
+trainer_stats, trainer, loss_value = train_model(model, tokenizer, dataset, test_df, prompt)
 roguel_values, similarity_values = evaluate_model(model, test_df, prompt, tokenizer)
 push_model_huggingface(trainer)
+
+
+'''
+---------- x ---------- x ----------
+Setting Up MLFlow
+'''
+
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+artifact_path = "models"
+experiment_name = "LeetSummarizer"
+
+# Checking for experiment
+existing_experiment = mlflow.get_experiment_by_name(experiment_name)
+
+if existing_experiment:
+    mlflow.set_experiment(experiment_name)
+    print(f"Experiment '{experiment_name}' already exists. Using the existing experiment.")
+else:
+    new_experiment = mlflow.create_experiment(experiment_name)
+    mlflow.set_experiment(experiment_name)
+    print(f"Experiment '{experiment_name}' does not exist. Creating a new experiment.")
+
+params = {
+    "per_device_train_batch_size" : per_device_train_batch_size,
+    "gradient_accumulation_steps" : gradient_accumulation_steps,
+    "warmup_steps" : warmup_steps,
+    "max_steps" : max_steps,
+    "learning_rate" : 2e-4,
+    "logging_steps" : 1,
+    "optim" : "adamw_8bit",
+    "weight_decay" : 0.01,
+    "lr_scheduler_type" : "linear",
+    "seed" : 3407,
+    "output_dir" : "outputs"
+}
+
+metrics = {
+    "loss_val" : loss_value,
+    "roguel_val" : np.mean(roguel_values),
+    "similarity_val" : np.mean(similarity_values)
+}
+
+curr_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+run_name = "model_run_" + curr_time
+artifact_path = "models"
+
+with mlflow.start_run(run_name=run_name) as run:
+    mlflow.log_params(params)
+    mlflow.log_metrics(metrics)
