@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel
 from transformers import AutoTokenizer
 from peft import PeftModel, PeftConfig
@@ -7,13 +7,36 @@ import ast
 import logging
 from fastapi.responses import PlainTextResponse
 import os
+from google.cloud import storage
 
 app = FastAPI()
 # Get log file path from environment variable
-log_file_path = os.getenv('LOG_FILE', 'app.log')
+credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+storage_client = storage.Client.from_service_account_json(credentials_path)
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[logging.FileHandler(log_file_path), logging.StreamHandler()])
+bucket_name = 'model-results-and-logs'
+
+class GCFileHandler(logging.StreamHandler):
+    def __init__(self, bucket, blob_name):
+        super().__init__()
+        self.bucket = bucket
+        self.blob_name = blob_name
+
+    def emit(self, record):
+        try:
+            blob = self.bucket.blob(self.blob_name)
+            blob.upload_from_string(self.format(record) + '\n', content_type='text/plain')
+        except Exception as e:
+            self.handleError(record)
+
+# Configure logging to use GCS
+log_blob_name = 'app.log'  # Replace with your desired blob path
+gc_handler = GCFileHandler(storage_client.bucket(bucket_name), log_blob_name)
+gc_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+gc_handler.setFormatter(formatter)
+
+logging.basicConfig(level=logging.INFO, handlers=[gc_handler])
 
 prompt = "Summarize the provided code solution for the given problem in simple, plain English text. Explain in simple text how the code works to solve the specified problem."
 class TextRequest(BaseModel):
@@ -73,11 +96,16 @@ async def generate_summary(request: TextRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/logs")
-async def get_logs():
+async def stream_logs(response: Response):
     try:
-        with open(log_file_path, 'r') as log_file:
-            logs = log_file.read()
-        return {"logs": logs}
+        # Fetch logs from GCS blob
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(log_blob_name)
+        log_stream = blob.download_as_text()
+
+        # Set content type and return streamed logs
+        response.headers["Content-Type"] = "text/plain"
+        return log_stream
     except Exception as e:
-        logging.error(f"An error occurred while reading the log file: {str(e)}")
-        raise HTTPException(status_code=500, detail="Could not read log file.")
+        logging.error(f"An error occurred while streaming logs: {str(e)}")
+        raise HTTPException(status_code=500, detail="Could not stream logs from GCS.")
