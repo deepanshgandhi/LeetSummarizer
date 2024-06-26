@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from transformers import AutoTokenizer
 from peft import PeftModel, PeftConfig
 from transformers import AutoModelForCausalLM
+import ast
 
 app = FastAPI()
 
@@ -11,6 +12,22 @@ prompt = "Summarize the provided code solution for the given problem in simple, 
 class TextRequest(BaseModel):
     question: str
     code: str
+
+def is_valid_python_code(code):
+    """
+    Checks if the given Python code has valid syntax.
+
+    Parameters:
+    code (str): The Python code to check.
+
+    Returns:
+    bool: True if the code is valid, False otherwise.
+    """
+    try:
+        ast.parse(code)
+        return True
+    except SyntaxError:
+        return False
 
 @app.on_event("startup")
 async def load_model():
@@ -30,6 +47,9 @@ async def load_model():
 async def generate_summary(request: TextRequest):
     try:
         #input_text = f"Question: {request.question}\nCode: {request.code}"
+        if not is_valid_python_code(request.code):
+            #Log the error
+            return {"status":400, "summary": "Invalid Python code"}
         input_text = prompt + "\n Question: )" + request.question + "\n Code: )" + request.code + "\n Plain Text: )"
         inputs = tokenizer(input_text, return_tensors="pt").to("cuda")
         output = model.generate(**inputs, max_new_tokens=200)
