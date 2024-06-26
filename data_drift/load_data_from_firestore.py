@@ -1,7 +1,7 @@
 import os
 from google.cloud import firestore
 
-def load_train_code() -> list:
+def load_data(collection_name: str) -> list:
     """
     Load data from Firestore.
 
@@ -14,7 +14,7 @@ def load_train_code() -> list:
 
     try:
         db = firestore.Client()
-        doc_ref = db.collection('Training_data').get()
+        doc_ref = db.collection(collection_name).get()
 
         if len(doc_ref) == 0:
             raise ValueError("Collection is empty!!")
