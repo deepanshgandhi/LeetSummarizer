@@ -14,6 +14,12 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Copy the FastAPI application
 COPY main.py /app/main.py
 
+# Ensure the directory for logs exists and has the correct permissions
+RUN mkdir -p /app/logs
+RUN chmod -R 777 /app/logs
+
+# Set environment variables to store logs in the correct location
+ENV LOG_FILE=/app/logs/app.log
 
 # Expose the port
 EXPOSE 8000

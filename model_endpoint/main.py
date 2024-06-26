@@ -4,9 +4,16 @@ from transformers import AutoTokenizer
 from peft import PeftModel, PeftConfig
 from transformers import AutoModelForCausalLM
 import ast
+import logging
+from fastapi.responses import PlainTextResponse
+import os
 
 app = FastAPI()
+# Get log file path from environment variable
+log_file_path = os.getenv('LOG_FILE', 'app.log')
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[logging.FileHandler(log_file_path), logging.StreamHandler()])
 
 prompt = "Summarize the provided code solution for the given problem in simple, plain English text. Explain in simple text how the code works to solve the specified problem."
 class TextRequest(BaseModel):
@@ -33,22 +40,24 @@ def is_valid_python_code(code):
 async def load_model():
     global model, tokenizer
     #config = PeftConfig.from_pretrained("deepansh1404/leetsummarizer")
-    print("\nLOADING BASE MODEL\n")
+    logging.info("Loading base model...")
     base_model = AutoModelForCausalLM.from_pretrained("unsloth/mistral-7b-v0.3-bnb-4bit")
-    print("\nBASE MODEL LOADED SUCCESSFULLY\n")
-    print("\nLOADING OUR MODEL\n")
+    logging.info("Base model loaded successfully.")
+    logging.info("Loading our model...")
     model = PeftModel.from_pretrained(base_model, "deepansh1404/leetsummarizer-mistral", use_safetensors = True)
-    print("\nOUR MODEL LOADED SUCCESSFULLY\n")
-    print("\nLOADING TOKENIZER\n")
+    logging.info("Our model loaded successfully.")
+    logging.info("Loading tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained("unsloth/mistral-7b-v0.3-bnb-4bit")
-    print("\nTOKENIZER LOADED SUCCESSFULLY\n")
+    logging.info("Tokenizer loaded successfully.")
 
 @app.post("/generate")
 async def generate_summary(request: TextRequest):
+    logging.info(f"Question: {request.question}")
+    logging.info(f"Code: {request.code}")
     try:
         #input_text = f"Question: {request.question}\nCode: {request.code}"
         if not is_valid_python_code(request.code):
-            #Log the error, this is an anomaly
+            logging.error("Invalid Python code received.")
             return {"status":400, "summary": "Invalid Python code"}
         input_text = prompt + "\n Question: )" + request.question + "\n Code: )" + request.code + "\n Plain Text: )"
         inputs = tokenizer(input_text, return_tensors="pt").to("cuda")
@@ -58,7 +67,17 @@ async def generate_summary(request: TextRequest):
         new_tokens = generated_sequence[input_length:]  # Exclude the input tokens
 
         summary = tokenizer.decode(new_tokens, skip_special_tokens=True)
-        #summary = tokenizer.decode(output[0], skip_special_tokens=True)
+        logging.info(f"Generated Summary: {summary}")
         return {"status":200, "summary": summary}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/logs")
+async def get_logs():
+    try:
+        with open(log_file_path, 'r') as log_file:
+            logs = log_file.read()
+        return {"logs": logs}
+    except Exception as e:
+        logging.error(f"An error occurred while reading the log file: {str(e)}")
+        raise HTTPException(status_code=500, detail="Could not read log file.")
