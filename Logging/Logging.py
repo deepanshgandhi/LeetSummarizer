@@ -8,7 +8,7 @@ client = bigquery.Client()
 # Initialize Elasticsearch client
 es = Elasticsearch(
     cloud_id='My_deployment:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyQwNDc4MDVmM2JmYzE0YTA2OGU4MzM5NjdiOTQwMWQ1MyQ2YzA2MWJiNzM3Mjg0MzYxYjFlZWIyYWZjNjQwNTA2Nw==',
-    basic_auth=('odedra.r@northeastern.edu', 'leetsummarizer@1')
+    basic_auth=('odedra.r@northeastern.edu', password)
 )
 
 # Define your time range for fetching logs
