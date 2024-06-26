@@ -8,3 +8,5 @@ data_pipeline/service_account_key.json
 frontend/node_modules
 backend/node_modules
 Scraping/driver
+/dags/src/data_preprocessing/service_account_key.json
+data_drift/service_account_key.json
