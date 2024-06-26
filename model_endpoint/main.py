@@ -7,7 +7,6 @@ import ast
 import logging
 from fastapi.responses import PlainTextResponse
 import os
-from google.cloud import storage
 from google.cloud import logging as cloud_logging
 from google.cloud.logging.handlers import CloudLoggingHandler
 
