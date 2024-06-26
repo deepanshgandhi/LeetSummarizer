@@ -48,7 +48,7 @@ async def generate_summary(request: TextRequest):
     try:
         #input_text = f"Question: {request.question}\nCode: {request.code}"
         if not is_valid_python_code(request.code):
-            #Log the error
+            #Log the error, this is an anomaly
             return {"status":400, "summary": "Invalid Python code"}
         input_text = prompt + "\n Question: )" + request.question + "\n Code: )" + request.code + "\n Plain Text: )"
         inputs = tokenizer(input_text, return_tensors="pt").to("cuda")
@@ -59,6 +59,6 @@ async def generate_summary(request: TextRequest):
 
         summary = tokenizer.decode(new_tokens, skip_special_tokens=True)
         #summary = tokenizer.decode(output[0], skip_special_tokens=True)
-        return {"summary": summary}
+        return {"status":200, "summary": summary}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
