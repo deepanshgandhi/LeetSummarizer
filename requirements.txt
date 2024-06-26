@@ -17,3 +17,5 @@ unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git
 wandb
 webdriver-manager==3.8.3
 xformers --no-deps
+google-cloud-bigquery
+elasticsearch
