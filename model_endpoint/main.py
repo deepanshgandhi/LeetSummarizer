@@ -25,7 +25,9 @@ class GCFileHandler(logging.StreamHandler):
     def emit(self, record):
         try:
             blob = self.bucket.blob(self.blob_name)
-            blob.upload_from_string(self.format(record) + '\n', content_type='text/plain')
+            existing_content = blob.download_as_string() if blob.exists() else b''
+            updated_content = existing_content + self.format(record).encode('utf-8') + b'\n'
+            blob.upload_from_string(updated_content, content_type='text/plain')
         except Exception as e:
             self.handleError(record)
 
