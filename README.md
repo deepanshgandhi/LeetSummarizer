@@ -107,3 +107,16 @@ NOTE : Google service key is required in order to execute the project successful
 
 The service key should be added in the path: dags/src/data_preprocessing
 ```
+
+## Model
+We have used the Mistral AI 7b model to generate concise, plain English summaries of code solutions. We have leveraged techniques like LoRA (Low-Rank Adaptation) and model quantisation
+to  to reduce memory usage and improve inference speed without compromising on the quality of generated summaries.
+
+The model loads preprocessed data from the airflow-dags-leetsummarizer bucket. We train the model on this data and save the plots for training loss in the gcp bucket. Also we evaluate the model on test data with metrics like rogue l score and semantic similarity, graphs for these metrics are also stored in the gcp bucket.
+
+The model is containerised inside a docker image. This docker image is built and updated every time there is push in the main branch of our leetsummarizer github repository. This ensures that the model code is always up to date.
+Once the data pipeline has run successfully on google cloud composer, we trigger the model training on our vm instance. The updated docker image is pulled by the vm and run. After the model training is completed, the model parameters are pushed to huggingface. 
+
+## Model Deployment
+We have another docker image for model serving. This image loads our model from huggingface and creates a /generate endpoint through fastapi. Similar to model training, we build and push the updated image for this whenever there's a push on the main branch. Once the model training image has run successfully on the vm instance, we pull the updated docker image for model serving, run it and expose the /generate endpoint. The chrome extension uses this endpoint to generate responses.
+We also have a /logs endpoint which displays the logs on a streamlit application. These logs are stored in a gcp bucket named model-results-and-logs. These logs help us track model performance and look for data drift and concept drift.
