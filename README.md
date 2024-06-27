@@ -181,7 +181,7 @@ The service key should be added in the path: dags/src/data_preprocessing
 ``` -->
 
 ## CI-CD
-<!-- CI/CD content goes here -->
+We create a new docker image for model training as well as model deployment whenever there is a push to the main branch. This is done by utilizing github actions, the file build-and-deploy.yaml in the actions folder takes care of image build and push. In the future, we can only create a docker image whenever there is a change in the model training or model deployment code.
 
 
 ## Model
