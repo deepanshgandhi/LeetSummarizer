@@ -273,5 +273,3 @@ Here are a few images of the chrome extension :-
 ![Chrome Extension snapshopt](assets/Chrome_Extension-3.png)
 
 
-Load Balancing
-For autoscaling com eng offers us to autom add or rem vm inst from a mang ist gr. so we can add our vm into autoscaling group which can handle load balancing. The reason we have not implemented this in our project is because we are using gpu based vm instance (l4 pgu) which is not being covered in the free trial version.'
