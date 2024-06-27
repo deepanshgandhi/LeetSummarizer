@@ -121,8 +121,8 @@ task_send_email = PythonOperator(
 #     dag=dag
 # )
 
-ssh_task = SSHOperator(
-    task_id="ssh_task",
+ssh_task_train = SSHOperator(
+    task_id="ssh_task_train",
     ssh_hook=ComputeEngineSSHHook(
         user="199512703680-compute@developer.gserviceaccount.com",
         instance_name=GCE_INSTANCE,
@@ -131,7 +131,21 @@ ssh_task = SSHOperator(
         use_oslogin=True,
         use_iap_tunnel=False
     ),
-    command="cd /; sudo docker-compose -p leetsummarizer down; sudo docker-compose -p leetsummarizer pull; sudo docker-compose -p leetsummarizer up -d",
+    command="cd /; sudo docker-compose -f docker-compose-train.yml -p leetsummarizer down; sudo docker-compose -f docker-compose-train.yml -p leetsummarizer pull; sudo docker-compose -f docker-compose-train.yml -p leetsummarizer up -d",
+    dag=dag
+)
+
+ssh_task_app = SSHOperator(
+    task_id="ssh_task_app",
+    ssh_hook=ComputeEngineSSHHook(
+        user="199512703680-compute@developer.gserviceaccount.com",
+        instance_name=GCE_INSTANCE,
+        zone=GCE_ZONE,
+        project_id=GCP_PROJECT_ID,
+        use_oslogin=True,
+        use_iap_tunnel=False
+    ),
+    command="cd /; sudo docker-compose -f docker-compose-app.yml -p leetsummarizer down; sudo docker-compose -f docker-compose-app.yml -p leetsummarizer pull; sudo docker-compose -f docker-compose-app.yml -p leetsummarizer up -d",
     dag=dag
 )
 
@@ -141,7 +155,8 @@ task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
-task_dvc_pipeline >> ssh_task >> task_send_email
+task_dvc_pipeline >> ssh_task_train >> ssh_task_app >> task_send_email
+
 #task_dvc_pipeline >> task_send_email
 
 # Set up the failure callback
