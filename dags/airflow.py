@@ -25,7 +25,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-GCE_INSTANCE = 'leetummarizer'
+GCE_INSTANCE = 'leetsummarizer'
 GCE_ZONE = 'us-west4-a'
 GCP_PROJECT_ID = 'leetsummarizer'
 
