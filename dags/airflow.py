@@ -121,14 +121,24 @@ task_send_email = PythonOperator(
 #     dag=dag
 # )
 
+ssh_task = SSHOperator(
+    task_id='ssh_task',
+    instance_name=GCE_INSTANCE,
+    zone=GCE_ZONE,
+    project_id=GCP_PROJECT_ID,
+    use_oslogin=True,
+    command='echo This command is executed from a DAG',
+    dag=dag
+)
+
 # Set up task dependencies
 task_load_data >> task_validate_schema
 task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
-#task_dvc_pipeline >> ssh_task >> task_send_email
-task_dvc_pipeline >> task_send_email
+task_dvc_pipeline >> ssh_task >> task_send_email
+#task_dvc_pipeline >> task_send_email
 
 # Set up the failure callback
 dag.on_failure_callback = handle_failure
