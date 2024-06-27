@@ -131,7 +131,7 @@ ssh_task = SSHOperator(
         use_oslogin=True,
         use_iap_tunnel=False
     ),
-    command="echo This command is executed from a DAG",
+    command="docker-compose down; docker-compose pull; docker-compose up -d",
     dag=dag
 )
 
