@@ -11,9 +11,9 @@ def send_success_email(**kwargs):
                       "gandhi.dee@northeastern.edu","savaj.b@northeastern.edu","madani.r@northeastern.edu"]
 
     # Define subject and body templates
-    subject_template = 'Airflow Success: {{ dag.dag_id }} - Data Pipeline tasks succeeded'
+    subject_template = 'Airflow Success: {{ dag.dag_id }} - Data+Model Pipeline tasks succeeded'
     body_template = '''Hi team,
-    The Data Pipeline tasks in DAG {{ dag.dag_id }} succeeded.'''
+    The Data+Model Pipeline tasks in DAG {{ dag.dag_id }} succeeded.'''
     
     # Render templates using Jinja2 Template
     subject = Template(subject_template).render(dag=kwargs['dag'], task=kwargs['task'])
