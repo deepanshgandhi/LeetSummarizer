@@ -182,3 +182,9 @@ Additionally, an airflow pipeline has been scheduled to run everyday. The pipeli
 - Lastly, the generated summary is stored back into Firestore along with the original data entry.
 
 This process ensures that from scraping to summarization, every step is streamlined and efficient.
+
+Here are a few images of the chrome extension :-
+
+![Chrome Extension snapshopt](assets/Chrome_Extension-1.png)
+![Chrome Extension snapshopt](assets/Chrome_Extension-2.png)
+![Chrome Extension snapshopt](assets/Chrome_Extension-3.png)
