@@ -271,7 +271,7 @@ push_model_huggingface(trainer)
 Setting Up MLFlow
 '''
 
-mlflow.set_tracking_uri("http://34.125.6.114/:5000")
+mlflow.set_tracking_uri("http://34.125.6.114:5000")
 artifact_path = "models"
 experiment_name = "LeetSummarizer"
 

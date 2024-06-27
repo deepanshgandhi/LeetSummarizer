@@ -21,4 +21,4 @@ CMD mlflow server \
     --backend-store-uri sqlite:///mlflow.db \
     --default-artifact-root /mlflow/artifacts \
     --artifacts-destination /mlflow/artifacts \
-    --host 0.0.0.0:5000
+    --host 0.0.0.0
