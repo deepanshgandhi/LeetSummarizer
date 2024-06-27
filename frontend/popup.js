@@ -20,15 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Add click event listener to "Generate Summary" button
-    generateSummaryButton.addEventListener('click', () => {
-        chrome.storage.local.get(['scrapedData'], () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                chrome.tabs.sendMessage(tabs[0].id, { type: 'scrapeSubmission' });
-            });
-        });
-    });
-
     // Add click event listener to "Back" button
     backButton.addEventListener('click', () => {
         summaryPage.style.display = 'none';

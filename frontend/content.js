@@ -45,60 +45,96 @@ function scrapeLeetCodeData() {
 
 function scrapeSubmissionData(retries = 5) {
     try {
-        const codeElement = document.querySelector('#editor > div.flex.flex-1.flex-col.overflow-hidden.pb-2 > div.flex-1.overflow-hidden > div > div > div.overflow-guard > div.monaco-scrollable-element.editor-scrollable.vs-dark > div.lines-content.monaco-editor-background > div.view-lines.monaco-mouse-cursor-text');
+        const codeContainer = document.querySelector('#editor > div.flex.flex-1.flex-col.overflow-hidden.pb-2 > div.flex-1.overflow-hidden > div > div > div.overflow-guard > div.monaco-scrollable-element.editor-scrollable.vs-dark');
 
-        if (!codeElement) {
-            console.error('Code element not found.');
+        if (!codeContainer) {
+            console.error('Code container not found.');
 
             if (retries > 0) {
                 setTimeout(() => scrapeSubmissionData(retries - 1), 1000);
             } else {
-                console.error('Max retries reached. Code element not found.');
+                console.error('Max retries reached. Code container not found.');
             }
             return;
         }
 
-        const code = codeElement.innerHTML.trim();
-        const logCode = codeElement.textContent.trim();
+        let collectedCode = '';
+        let lastScrollTop = -1;
+        let noMoreContentCounter = 0; // Counter to detect no more content
 
-        console.log('Scraped code:', logCode);
-        chrome.storage.local.get(['scrapedData'], (result) => {
-            const data = result.scrapedData || {};
-            data.submittedCode = code;
+        function scrollAndCollect(container) {
+            // Select all lines of code
+            const codeElements = document.querySelectorAll('#editor > div.flex.flex-1.flex-col.overflow-hidden.pb-2 > div.flex-1.overflow-hidden > div > div > div.overflow-guard > div.monaco-scrollable-element.editor-scrollable.vs-dark > div.lines-content.monaco-editor-background > div.view-lines.monaco-mouse-cursor-text > div.view-line');
 
-            const postData = {
-                question: data.question,
-                // userId: data.user,
-                code: logCode
-            };
+            let newContent = false; // Flag to check if new content was added
 
-            console.log('Posted code:', postData);
+            codeElements.forEach(codeElement => {
+                const codeLine = codeElement.innerText; // innerText preserves spaces and newlines
+                if (!collectedCode.includes(codeLine)) { // Check if line is already collected
+                    collectedCode += codeLine + '\n';
+                    newContent = true;
+                }
+            });
 
-            chrome.storage.local.set({ scrapedData: data }, () => {
-                console.log('Submission data stored successfully:', data);
+            // Save the current scroll position
+            const currentScrollTop = container.scrollTop;
 
-                fetch('http://localhost:3000/proxy', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(postData)
-                })
-                    .then(response => response.json())
-                    .then(responseData => {
-                        console.log('POST request successful. Response:', responseData);
+            // If the scroll position has not changed
+            if (currentScrollTop === lastScrollTop) {
+                noMoreContentCounter++;
+                if (noMoreContentCounter > 2) { 
+                    console.log('Collected code:', collectedCode);
 
-                        data.summary = responseData.summary;
+                    chrome.storage.local.get(['scrapedData'], (result) => {
+                        const data = result.scrapedData || {};
+                        data.submittedCode = collectedCode;
+
+                        const postData = {
+                            question: data.question,
+                            userId: data.user,
+                            code: collectedCode
+                        };
+
+                        console.log('Posted code:', postData);
 
                         chrome.storage.local.set({ scrapedData: data }, () => {
-                            chrome.runtime.sendMessage({ type: 'showSubmission', data });
+                            console.log('Submission data stored successfully:', data);
+
+                            fetch('http://localhost:3000/upload', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(postData)
+                            })
+                                .then(response => response.json())
+                                .then(responseData => {
+                                    console.log('POST request successful. Response:', responseData);
+
+                                    data.summary = responseData.summary;
+
+                                    chrome.storage.local.set({ scrapedData: data }, () => {
+                                        chrome.runtime.sendMessage({ type: 'showSubmission', data });
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error in POST request:', error);
+                                });
                         });
-                    })
-                    .catch(error => {
-                        console.error('Error in POST request:', error);
                     });
-            });
-        });
+
+                    return;
+                }
+            } else {
+                noMoreContentCounter = 0;
+            }
+
+            lastScrollTop = currentScrollTop;
+            container.scrollTop += container.clientHeight;
+            setTimeout(() => scrollAndCollect(container), 1000); 
+        }
+        codeContainer.scrollTop = 0;
+        scrollAndCollect(codeContainer);
     } catch (error) {
         console.error('Error scraping submission data:', error);
     }

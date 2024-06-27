@@ -117,6 +117,26 @@ The model loads preprocessed data from the airflow-dags-leetsummarizer bucket. W
 The model is containerised inside a docker image. This docker image is built and updated every time there is push in the main branch of our leetsummarizer github repository. This ensures that the model code is always up to date.
 Once the data pipeline has run successfully on google cloud composer, we trigger the model training on our vm instance. The updated docker image is pulled by the vm and run. After the model training is completed, the model parameters are pushed to huggingface. 
 
+## Model Components
+The model training script (train.py) consists of 8 distinct tasks. These tasks are designed to execute in a linear manner and do not utilize Airflow for orchestration due to their sequential nature, which cannot be optimized through parallel execution. Below is an overview of each task in the model training pipeline:
+
+1. load_data_from_gcs : Loads the JSON data from Google Cloud Storage using the storage.Client() from Google Cloud SDK.
+
+2. upload_to_gcs : Uploads a file to Google Cloud Storage using the storage.Client() from Google Cloud SDK.
+
+3. load_model_tokenizer : Loads a language model and tokenizer from HuggingFaceHub using FastLanguageModel.from_pretrained() with specific configurations including model name, maximum sequence length, data type for tensor (None for auto detection), and 4-bit quantization option.
+
+4. load_peft_model : Enhances a language model using the PEFT configuration with specific settings like LoRA rank, targeted modules for modification, dropout rate, bias strategy, gradient checkpointing for long context handling, random state, and additional configuration options.
+
+5. prepare_data : Prepares training data for natural language processing tasks using a tokenizer. Loads data from Google Cloud Storage, splits it into training and test sets, and formats it with a prompt for summarizing code solutions.
+
+6. train_model : Trains a language model using the SFTTrainer with specified training arguments and settings. Performs training on the provided dataset, logs training statistics including loss values, plots the training loss curve, and uploads the plot to Google Cloud Storage.
+
+7. evaluate_model : Evaluates a language model's performance on test data using ROUGE-L score and cosine similarity. Generates text based on prompts and evaluates against actual text in the test dataset. Computes and plots ROUGE-L scores and similarity scores per data point, saving the plots to Google Cloud Storage.
+
+8. push_model_huggingface: Pushes a trained model to the HuggingFace ModelHub using its API token. Saves the API token using HfFolder.save_token() and then uses trainer.model.push_to_hub() to upload the model to a specific repository (deepansh1404/leetsummarizer-mistral).
+
+
 ## Model Deployment
 We have another docker image for model serving. This image loads our model from huggingface and creates a /generate endpoint through fastapi. Similar to model training, we build and push the updated image for this whenever there's a push on the main branch. Once the model training image has run successfully on the vm instance, we pull the updated docker image for model serving, run it and expose the /generate endpoint. The chrome extension uses this endpoint to generate responses.
 We also have a /logs endpoint which displays the logs on a streamlit application. These logs are stored in a gcp bucket named model-results-and-logs. These logs help us track model performance and look for data drift and concept drift.
