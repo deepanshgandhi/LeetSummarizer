@@ -49,7 +49,7 @@ dag = DAG(
     'data_pipeline_v3',
     default_args=default_args,
     description='LeetSummarizer Data Pipeline',
-    schedule_interval=None,
+    schedule_interval=timedelta(days=1),  # Run once a day
     catchup=False,
 )
 
