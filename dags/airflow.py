@@ -122,12 +122,16 @@ task_send_email = PythonOperator(
 # )
 
 ssh_task = SSHOperator(
-    task_id='ssh_task',
-    instance_name=GCE_INSTANCE,
-    zone=GCE_ZONE,
-    project_id=GCP_PROJECT_ID,
-    use_oslogin=True,
-    command='echo This command is executed from a DAG',
+    task_id="ssh_task",
+    ssh_hook=ComputeEngineSSHHook(
+        user="199512703680-compute@developer.gserviceaccount.com",
+        instance_name=GCE_INSTANCE,
+        zone=GCE_ZONE,
+        project_id=GCP_PROJECT_ID,
+        use_oslogin=True,
+        use_iap_tunnel=False
+    ),
+    command="echo This command is executed from a DAG",
     dag=dag
 )
 
