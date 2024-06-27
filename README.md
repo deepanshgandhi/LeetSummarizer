@@ -182,6 +182,7 @@ The service key should be added in the path: dags/src/data_preprocessing
 
 ## CI-CD
 We create a new docker image for model training as well as model deployment whenever there is a push to the main branch. This is done by utilizing github actions, the file build-and-deploy.yaml in the actions folder takes care of image build and push. In the future, we can only create a docker image whenever there is a change in the model training or model deployment code.
+The code on the airflow-dags-leetsummarizer bucket is always in sync with the main branch. This ensures that the cloud composer is always running the update dags in airflow. We have done this by creating a cloud build trigger in gcp, and a corresponding cloudbuild.yaml file in the github directory. 
 
 
 ## Model
