@@ -154,9 +154,31 @@ Additionally, an airflow pipeline has been scheduled to run everyday. The pipeli
 2. At the end of the data pipeline, a GCP VM instance is created that pulls the latest training image from the gcp artifact registry.
 3. Once the training image is run, the image is then deployed to to be accessible as the end point.
 
-The model is accessed by the application in the following manner:
-1. Once the end point is up and running, the endpoint is being accessed by API.
-2. The chrome extension scapes the question, code and username from LeetCode. We now have the data for summarization.
-3. The chrome extension sends out a request to the endpoint with the data.
-4. The model generates the summary of the code and sends back the same.
-5. And Voila! You now have the summarization of the code that you can go through
+
+## User Interaction
+
+#### Building the Chrome Extension:
+
+- Developed a Chrome extension specifically for scraping LeetCode data.
+- It collects essential details like user ID, problem title, description, and code snippet.
+
+#### Data Handling through API Calls:
+
+- After scraping, the extension sends this data to our intermediary server via API calls.
+- The server's role is to store this data in Firestore, our database for future model retraining.
+
+#### Model Integration:
+
+- Once the data is stored, the server forwards it to our model.
+- This model takes in the scraped data and generates a summarized response for the code.
+
+#### Feedback to the Chrome Extension:
+
+- The summarized code is then sent back through the intermediary server to our Chrome extension.
+- This allows the user to view the concise summary directly in their browser.
+
+#### Persistence in Firestore:
+
+- Lastly, the generated summary is stored back into Firestore along with the original data entry.
+
+This process ensures that from scraping to summarization, every step is streamlined and efficient.
