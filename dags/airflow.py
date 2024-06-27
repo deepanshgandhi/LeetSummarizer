@@ -112,14 +112,14 @@ task_send_email = PythonOperator(
 )
 
 
-# ssh_task = SSHOperator(
-#     task_id='ssh_task',
-#     ssh_hook=ssh_hook,
-#     command='echo This command is executed from a DAG',
-#     get_pty=True,
-#     do_xcom_push=True,
-#     dag=dag
-# )
+ssh_task = SSHOperator(
+    task_id='ssh_task',
+    ssh_hook=ssh_hook,
+    command='echo This command is executed from a DAG',
+    get_pty=True,
+    do_xcom_push=True,
+    dag=dag
+)
 
 # Set up task dependencies
 task_load_data >> task_validate_schema
@@ -127,7 +127,8 @@ task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
-task_dvc_pipeline >> task_send_email
+task_dvc_pipeline >> ssh_task >> task_send_email
+#task_dvc_pipeline >> task_send_email
 
 # Set up the failure callback
 dag.on_failure_callback = handle_failure
