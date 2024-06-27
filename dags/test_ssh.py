@@ -24,3 +24,5 @@ with airflow.DAG(
           use_internal_ip=True),
       command='echo This command is executed from a DAG',
       dag=dag)
+  
+ssh_task
