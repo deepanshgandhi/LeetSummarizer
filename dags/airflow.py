@@ -124,14 +124,14 @@ task_send_email = PythonOperator(
 ssh_task = SSHOperator(
     task_id="ssh_task",
     ssh_hook=ComputeEngineSSHHook(
-        user="shah.sanke@northeastern.edu",
+        user="199512703680-compute@developer.gserviceaccount.com",
         instance_name=GCE_INSTANCE,
         zone=GCE_ZONE,
         project_id=GCP_PROJECT_ID,
         use_oslogin=True,
         use_iap_tunnel=False
     ),
-    command="docker-compose down; docker-compose pull; docker-compose up -d",
+    command="cd /; sudo docker-compose -p leetsummarizer down; sudo docker-compose -p leetsummarizer pull; sudo docker-compose -p leetsummarizer up -d",
     dag=dag
 )
 
