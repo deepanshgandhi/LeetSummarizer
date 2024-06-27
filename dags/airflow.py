@@ -142,7 +142,7 @@ task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
-task_dvc_pipeline >> task_send_email >> ssh_task
+task_dvc_pipeline >> task_send_email
 
 # Set up the failure callback
 dag.on_failure_callback = handle_failure
