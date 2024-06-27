@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apt-get update
 RUN apt-get install -y curl git software-properties-common
 RUN apt-get install build-essential -y
-
+RUN pip install mlflow[extras]
 #COPY leetsummarizer-4eccb62456a1.json /app/leetsummarizer-4eccb62456a1.json
 
 # Set the environment variable for Google Cloud SDK to use the key file
@@ -17,6 +17,7 @@ RUN apt-get install build-essential -y
 # Set the environment variable for Google Cloud SDK to use the key file
 ARG GOOGLE_APPLICATION_CREDENTIALS
 ENV GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+ENV MLFLOW_HOME /mlflow
 
 # Install requirements
 COPY requirements.txt /app/requirements.txt
@@ -24,4 +25,6 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY train.py /app/train.py
 
-CMD ["python", "train.py"]
+EXPOSE 5000
+
+CMD ["sh", "-c", "python train.py && mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root /mlflow --host 0.0.0.0 --port 5000"]
