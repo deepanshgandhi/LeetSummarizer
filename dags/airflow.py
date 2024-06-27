@@ -46,7 +46,7 @@ def handle_failure(context):
 
 # Define the DAG
 dag = DAG(
-    'data_pipeline_v3',
+    'pipeline',
     default_args=default_args,
     description='LeetSummarizer Data Pipeline',
     schedule_interval=timedelta(days=1),  # Run once a day
