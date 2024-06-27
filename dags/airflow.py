@@ -5,6 +5,7 @@ from airflow.utils.dates import days_ago
 
 from airflow.providers.ssh.operators.ssh import SSHOperator
 from airflow.providers.google.cloud.hooks.compute_ssh import ComputeEngineSSHHook
+from airflow.providers.ssh.hooks.ssh import SSHHook
 
 from src.data_preprocessing.load_data import load_data
 from src.data_preprocessing.handle_comments import remove_comments
@@ -28,6 +29,8 @@ default_args = {
 GCE_INSTANCE = 'leetsummarizer'
 GCE_ZONE = 'us-west4-a'
 GCP_PROJECT_ID = 'leetsummarizer'
+
+ssh_hook = SSHHook(ssh_conn_id='ssh_vm')
 
 # Function to handle failur
 def handle_failure(context):
@@ -108,17 +111,13 @@ task_send_email = PythonOperator(
     dag=dag,
 )
 
+
 ssh_task = SSHOperator(
-      task_id='composer_compute_ssh_task',
-      ssh_hook=ComputeEngineSSHHook(
-          instance_name=GCE_INSTANCE,
-          zone=GCE_ZONE,
-          project_id=GCP_PROJECT_ID,
-          use_oslogin=True,
-          use_iap_tunnel=False,
-          use_internal_ip=True),
-      command='echo This command is executed from a DAG',
-      dag=dag)
+    task_id='ssh_task',
+    ssh_hook=ssh_hook,
+    command='echo This command is executed from a DAG',
+    dag=dag
+)
 
 # Set up task dependencies
 task_load_data >> task_validate_schema
