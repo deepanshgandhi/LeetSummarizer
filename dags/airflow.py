@@ -2,6 +2,10 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
 from airflow.utils.dates import days_ago
+
+from airflow.providers.ssh.operators.ssh import SSHOperator
+from airflow.providers.google.cloud.hooks.compute_ssh import ComputeEngineSSHHook
+
 from src.data_preprocessing.load_data import load_data
 from src.data_preprocessing.handle_comments import remove_comments
 from src.data_preprocessing.validate_code import validate_code
@@ -90,6 +94,23 @@ task_dvc_pipeline = PythonOperator(
     python_callable=fetch_and_track_data,
     provide_context=True,
     dag=dag,
+)
+
+GCE_INSTANCE = 'leetsummarizer'
+GCE_ZONE = 'us-west4-a'
+GCP_PROJECT_ID = 'leetsummarizer'
+
+task_ssh_vm_connect = SSHOperator(
+    task_id = 'composer_compute_ssh_task',
+    ssh_hook = ComputeEngineSSHHook(
+        instance_name = GCE_INSTANCE,
+        zone = GCE_ZONE,
+        project_id = GCP_PROJECT_ID,
+        use_oslogin = True,
+        use_iap_tunnel = False,
+        use_internal_ip = True),
+    command = 'echo This command is executed from a DAG',
+    dag=dag
 )
 
 task_send_email = PythonOperator(
