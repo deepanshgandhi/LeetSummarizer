@@ -1,0 +1,233 @@
+.
+├── .dvc
+│   ├── .gitignore
+│   └── config
+├── .git
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   └── update.sample
+│   ├── info
+│   │   └── exclude
+│   ├── logs
+│   │   ├── refs
+│   │   └── HEAD
+│   ├── refs
+│   │   ├── heads
+│   │   ├── remotes
+│   │   └── tags
+│   ├── COMMIT_EDITMSG
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── ORIG_HEAD
+│   ├── config
+│   ├── description
+│   ├── index
+│   ├── packed-refs
+│   └── sourcetreeconfig
+├── .github
+│   └── workflows
+│       └── build-and-deploy.yaml
+├── Logging
+│   ├── DataFlow_pipeline.py
+│   ├── Load_to_bigquery.py
+│   └── Logging.py
+├── Scraping
+│   ├── driver
+│   │   ├── chromedriver-win64
+│   │   └── chromedriver.exe
+│   ├── .DS_Store
+│   ├── problem_scrape.py
+│   ├── problemset.csv
+│   ├── scraper.py
+│   └── testing.py
+├── assets
+│   ├── DVC_eg.jpeg
+│   ├── pipeline_execution.jpeg
+│   ├── pipeline_execution.png
+│   └── pipeline_flow.jpg
+├── backend
+│   ├── node_modules
+│   │   ├── .bin
+│   │   ├── accepts
+│   │   ├── array-flatten
+│   │   ├── body-parser
+│   │   ├── bytes
+│   │   ├── call-bind
+│   │   ├── content-disposition
+│   │   ├── content-type
+│   │   ├── cookie
+│   │   ├── cookie-signature
+│   │   ├── debug
+│   │   ├── define-data-property
+│   │   ├── depd
+│   │   ├── destroy
+│   │   ├── ee-first
+│   │   ├── encodeurl
+│   │   ├── es-define-property
+│   │   ├── es-errors
+│   │   ├── escape-html
+│   │   ├── etag
+│   │   ├── express
+│   │   ├── finalhandler
+│   │   ├── forwarded
+│   │   ├── fresh
+│   │   ├── function-bind
+│   │   ├── get-intrinsic
+│   │   ├── gopd
+│   │   ├── has-property-descriptors
+│   │   ├── has-proto
+│   │   ├── has-symbols
+│   │   ├── hasown
+│   │   ├── http-errors
+│   │   ├── iconv-lite
+│   │   ├── inherits
+│   │   ├── ipaddr.js
+│   │   ├── media-typer
+│   │   ├── merge-descriptors
+│   │   ├── methods
+│   │   ├── mime
+│   │   ├── mime-db
+│   │   ├── mime-types
+│   │   ├── ms
+│   │   ├── negotiator
+│   │   ├── object-inspect
+│   │   ├── on-finished
+│   │   ├── parseurl
+│   │   ├── path-to-regexp
+│   │   ├── proxy-addr
+│   │   ├── qs
+│   │   ├── range-parser
+│   │   ├── raw-body
+│   │   ├── safe-buffer
+│   │   ├── safer-buffer
+│   │   ├── send
+│   │   ├── serve-static
+│   │   ├── set-function-length
+│   │   ├── setprototypeof
+│   │   ├── side-channel
+│   │   ├── statuses
+│   │   ├── toidentifier
+│   │   ├── type-is
+│   │   ├── unpipe
+│   │   ├── utils-merge
+│   │   ├── vary
+│   │   └── .package-lock.json
+│   ├── .dockerignore
+│   ├── dockerfile
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+├── config
+│   └── airflow.cfg
+├── dags
+│   ├── __pycache__
+│   │   ├── airflow.cpython-312.pyc
+│   │   ├── model.cpython-312.pyc
+│   │   ├── model_pipeline.cpython-312.pyc
+│   │   └── my_custom_log_config.cpython-312.pyc
+│   ├── data
+│   │   ├── file.csv
+│   │   └── test.csv
+│   ├── model
+│   │   └── model2.sav
+│   ├── src
+│   │   ├── __pycache__
+│   │   ├── data_preprocessing
+│   │   ├── .DS_Store
+│   │   └── __init__.py
+│   ├── .DS_Store
+│   ├── airflow.py
+│   ├── model.py
+│   └── model_pipeline.py
+├── data_drift
+│   ├── __pycache__
+│   │   ├── code_complexity.cpython-310.pyc
+│   │   ├── compare_complexities.cpython-310.pyc
+│   │   ├── load_code.cpython-310.pyc
+│   │   ├── load_data_from_firestore.cpython-310.pyc
+│   │   └── load_train_data.cpython-310.pyc
+│   ├── code_complexity.py
+│   ├── compare_complexities.py
+│   ├── drift_detection.py
+│   ├── gcp_alert.py
+│   ├── load_data_from_firestore.py
+│   ├── requirements.txt
+│   └── service_account_key.json
+├── data_pipeline
+│   ├── .gitignore
+│   ├── Leet_Summarizer_train_data.csv
+│   ├── data.json.dvc
+│   └── write_to_firestore.py
+├── frontend
+│   ├── .idea
+│   │   ├── .gitignore
+│   │   ├── frontend.iml
+│   │   ├── misc.xml
+│   │   ├── modules.xml
+│   │   └── vcs.xml
+│   ├── icons
+│   │   ├── icon128.png
+│   │   ├── icon16.png
+│   │   └── icon48.png
+│   ├── background.js
+│   ├── content.js
+│   ├── manifest.json
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── popup.html
+│   ├── popup.js
+│   └── server.js
+├── logs
+│   ├── dag_processor_manager
+│   │   └── dag_processor_manager.log
+│   └── scheduler
+│       ├── 2024-06-26
+│       └── latest -> 2024-06-26
+├── model
+│   ├── tests
+│   │   ├── __init__.py
+│   │   ├── test_remove_comments.py
+│   │   └── test_validate_code.py
+│   ├── .DS_Store
+│   ├── __init__.py
+│   ├── model.ipynb
+│   └── updated_Model_func.ipynb
+├── model_endpoint
+│   ├── dashboard.py
+│   ├── dockerfile
+│   ├── main.py
+│   └── requirements.txt
+├── model_training
+│   ├── dockerfile
+│   ├── requirements.txt
+│   └── train.py
+├── plugins
+├── .DS_Store
+├── .dvcignore
+├── .env
+├── .gitignore
+├── LeetSummarizer
+├── README.md
+├── __init__.py
+├── cloudbuild.yaml
+├── docker-compose.yaml
+├── dockerfile
+├── requirements.txt
+├── test.xlsx
+├── train.xlsx
+└── tree.txt
+
+213 directories, 121 files
+
+tree -a -L 3 --dirsfirst > tree.txt
