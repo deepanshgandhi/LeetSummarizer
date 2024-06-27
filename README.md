@@ -55,7 +55,7 @@ The dataset provided encompasses a comprehensive compilation of LeetCode questio
 The dataset utilized in this project was generated internally to suit the specific requirements and objectives of the analysis. This self-curated dataset ensures relevance and alignment with the research goals, allowing for tailored insights and interpretations. By crafting our own data, we maintain control over its quality and suitability for the intended analyses.
 
 ## Project Workflow
-![Project Workflow](assets/architecture_diagram.jpeg)
+![Project Workflow](assets/architecture_diagram.png)
 
 ## Tools Used In Project
 
@@ -139,9 +139,7 @@ MLFlow Tracking
 ![MLFlow Experimentation](assets/mlflow_model_registry.png)
 
 #### Monitoring
-
-
-GCP Tracking
+GCP Instance Monitoring
 <!-- IMAGE GOES HERE -->
 ![GCP Monitoring](assets/cloud_stats.jpeg)
 
