@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  fastapi-gpu-app:
+    image: us-docker.pkg.dev/leetsummarizer/gcr.io/fastapi-gpu-app:latest
+    ports:
+      - "8000:8000"
+    runtime: nvidia
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/leetsummarizer-4eccb62456a1.json
+    volumes:
+      - /secrets:/secrets

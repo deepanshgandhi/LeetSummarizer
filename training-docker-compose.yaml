@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  model-training:
+    image: us-docker.pkg.dev/leetsummarizer/gcr.io/model-training:latest
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/leetsummarizer-4eccb62456a1.json
+    volumes:
+      - /secrets:/secrets
+    runtime: nvidia
