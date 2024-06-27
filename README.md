@@ -2,16 +2,46 @@
 
 This is a Chrome extension that summarizes users' code on LeetCode in plain English. It breaks down the code into simple steps, explaining the logic and functionality in clear, easy-to-understand language.
 
----
+## Table of Contents
+
+- [LeetSummarizer](#leetSummarizer)
+    - [Table of Contents](#table-of-contents)
+    - [Data Information](#data-information)
+    - [Data Card](#data-card)
+    - [Data Source](#data-source)
+    - [Project Workflow](#project-workflow)
+    - [Tools Used In Project](#tools-used-in-project)
+    - [Data Pipeline Setup](#data-pipeline-setup)
+    - [Features](#features)
+        - [Tracking](#tracking)
+        - [Logging](#logging)
+        - [DVC](#dvc)
+        - [Monitoring](#monitoring)
+        - [Load Balancing](#load-balancing)
+    - [CI-CD](#ci-cd)
+    - [Model](#model)
+    - [Model Components](#model-components)
+    - [Model Deployment](#model-deployment)
+    - [Drift Detection](#drift-detection)
+    - [High Level End-to-End Design Overview](#high-level-end-to-end-design-overview)
+    - [User Interaction](#user-interaction)
+        - [Building Chrome Extension](#building-the-chrome-extension)
+        - [Data Handling Through API Calls](#data-handling-through-api-calls)
+        - [Model Integration](#model-integration)
+        - [Feedback to the Chrome Extension](#feedback-to-the-chrome-extension)
+        - [Persistence in Firestore](#persistence-in-firestore)
+
+
+<!-- ---
 ---
 
-# Milestone : Data Pipeline
+# Milestone : Data Pipeline -->
 
-## 1. Data Information
+## Data Information
 The dataset provided encompasses a comprehensive compilation of LeetCode questions, coupled with their corresponding code solutions and concise summaries. Reflecting the essence of algorithmic problem-solving, each entry encapsulates a unique challenge and its resolution, offering valuable insights into various coding paradigms and techniques. This repository serves as a reservoir for developers and coding enthusiasts alike, fostering skill development and proficiency enhancement in algorithmic problem-solving. While distinct from traditional transactional datasets, this collection plays a pivotal role in honing programming aptitude and fostering a deeper understanding of algorithmic complexities.
 
 
-## 2. Data Card
+## Data Card
 | Variable Name | Role | Type | Description |
 |-----------------|-----------------|-----------------|-----------------|
 | Question | Feature | String | A concise representation of the LeetCode problem statement. |
@@ -19,11 +49,21 @@ The dataset provided encompasses a comprehensive compilation of LeetCode questio
 | Plain Text | Target | String | A succinct summary providing an explanation of the implemented code. |
 
 
-## 3. Data Source
+## Data Source
 The dataset utilized in this project was generated internally to suit the specific requirements and objectives of the analysis. This self-curated dataset ensures relevance and alignment with the research goals, allowing for tailored insights and interpretations. By crafting our own data, we maintain control over its quality and suitability for the intended analyses.
 
+## Project Workflow
+![Project Workflow](assets/architecture_diagram.jpeg)
 
-## 4. Pipeline Setup
+## Tools Used In Project
+
+<p align="center">
+  <a href="">
+    <img src="https://skillicons.dev/icons?i=python,javascript,fastapi,nodejs,github,docker,gcp,firebase,vercel,anaconda,githubactions,pytorch" />
+  </a>
+</p>
+
+## Data Pipeline Setup
 Setting up pipeline starts with setting up Apache Airflow. Apache Airflow is an open-source platform used to programmatically author, schedule, and monitor workflows. It enables users to orchestrate complex data pipelines with ease and reliability.
 
 Install apache using the below command.
@@ -33,13 +73,15 @@ pip install apache-airflow
 
 Next, start airflow's scheduler and web server to manage Directed Acyclic Graphs (DAGs) via a browser-based UI, where you define tasks and their dependencies for workflow automation.
 
+![Project Workflow](assets/pipeline_execution.png)
 
-## 5. Data Pipeline Components
+
+<!-- ## 5. Data Pipeline Components
 The data pipeline comprises a single Directed Acyclic Graph (DAG) module encompassing five distinct tasks. Here's an overview of each task:
 
 <!-- IMAGE GOES HERE -->
-![Pipeline Flow](assets/pipeline_flow.jpg)
-
+<!-- ![Pipeline Flow](assets/pipeline_flow.jpg) -->
+<!-- 
 1. task_load_data : Initiates the execution of the load_data.py Python script to retrieve data from the source, which in our case is Firebase.
 
 2. task_validate_schema : Utilizes validate_schema.py to ensure the integrity of the 'Python code' data stored within the dataset by validating its schema.
@@ -52,26 +94,56 @@ The data pipeline comprises a single Directed Acyclic Graph (DAG) module encompa
 
 6. task_dvc_pipeline : Executes dvc_pipeline.py to update data versioning.
 
-The below image shows the executed DAG pipeline.
+The below image shows the executed DAG pipeline. -->
 <!-- IMAGE GOES HERE -->
-![Pipeline Execution](assets/pipeline_execution.jpeg)
+<!-- ![Pipeline Execution](assets/pipeline_execution.jpeg) -->
 
 
-## 6. Features
-- Tracking : For this task, Git serves as a robust version control system, facilitating project tracking through its branching and tagging capabilities. It enables teams to monitor changes, collaborate efficiently, and maintain a coherent history of project evolution.
+## Features
+#### Tracking : 
+For this task, Git serves as a robust version control system, facilitating project tracking through its branching and tagging capabilities. It enables teams to monitor changes, collaborate efficiently, and maintain a coherent history of project evolution. 
 
-- Logging : The project incorporates comprehensive try-except blocks within functions, capturing logs of successful executions or errors. These logs can be accessed in the logs/ directory created in the local machine after running the pipeline. Logging provides visibility into the execution process and facilitating error tracking and resolution.
+#### Logging : 
+- The project incorporates comprehensive try-except blocks within functions, capturing logs of successful executions or errors. These logs can be accessed in the logs/ directory created in the local machine after running the pipeline.
+- The logs generated while deploying a model to an endpoint via fast api have being stored in cloud logging.
+    
+<!-- IMAGE GOES HERE -->
+![Deployment Logs](assets/deploy_logs.jpeg)
 
-- DVC : DVC (Data Version Control) plays a crucial role in managing and versioning large datasets efficiently. To facilitate the use of DVC in the project, a bucket was created in Google Cloud Storage as evidenced in the image below.
+Logging provides visibility into the execution process and facilitating error tracking and resolution. 
+
+#### DVC :
+DVC (Data Version Control) plays a crucial role in managing and versioning large datasets efficiently. To facilitate the use of DVC in the project, a bucket was created in Google Cloud Storage.
 <!-- IMAGE GOES HERE -->
 ![DVC Execution Screenshot](assets/DVC_eg.jpeg)
+
+#### Experimentation :
+Experimentation plays a major role in figuring out which model is better. <Give use of mlflow here>
+
+| Model | Avg. Roguel Value | Avg. Similarity Value | Loss Value |
+|-----------------|-----------------|-----------------|-----------------|
+| Llama3 | 0.351 | 0.187 | 0.211 |
+| MistralAI | 0.394 | 0.195 | 0.188 |
+
+We performed monitoring using MLFlow and GCP
+
+MLFlow Tracking
+<!-- IMAGE GOES HERE -->
+![MLFlow Experimentation](assets/mlflow_model_registry.png)
+
+GCP Tracking
+<!-- IMAGE GOES HERE -->
+![GCP Monitoring](assets/cloud_stats.jpeg)
+
+#### Load Balancing
+For autoscaling, compute engine offers us to automate addition or removal of VM instances from a managed instance group. Thus, we can add our VM into the instance group to handle load balancing. Due to the resource restriction (usage of L4 GPU based instance), the same has not been implemented in our project.
 
 
 ```
 NOTE : SchemaGen and StatisticsGen have been omitted from our pipeline as they are not pertinent to our project's dataset structure since we are dealing with strings whereas the aforementioned libraries are only pertinent for categorical/numerical data types. However, it is advised to consider utilizing these libraries to enhance data handling capabilities.
 ```
 
-## Running The Project
+<!-- ## Running The Project
 Ensure that the following prerequisites are in place before running the project:
 - Docker
 - Airflow
@@ -106,7 +178,11 @@ LeetSummarizer % docker-compose up -d
 NOTE : Google service key is required in order to execute the project successfully. Please contact the team to generate your personal service key.
 
 The service key should be added in the path: dags/src/data_preprocessing
-```
+``` -->
+
+## CI-CD
+<!-- CI/CD content goes here -->
+
 
 ## Model
 We have used the Mistral AI 7b model to generate concise, plain English summaries of code solutions. We have leveraged techniques like LoRA (Low-Rank Adaptation) and model quantisation
@@ -142,17 +218,24 @@ We have another docker image for model serving. This image loads our model from 
 We also have a /logs endpoint which displays the logs on a streamlit application. These logs are stored in a gcp bucket named model-results-and-logs. These logs help us track model performance and look for data drift and concept drift.
 
 
+## Drift Detection
+<!-- Content on drift detection goes here -->
+Data drift refers to the change in the statistical properties of data over time, which can significantly affect the performance of machine learning models if not monitored and managed properly. Specifically, for our case, we can detect data drift using the below methods:
+- Keeping a track of the LOC (Lines Of Code)
+- Tracking the complexities of the code in the dataset
+
+In the project, we use cyclomatic complexity to detect data drift by analyzing the complexity of code over time. Cyclomatic complexity is a software metric used to measure the complexity of a program by quantifying the number of linearly independent paths through the program's source code. By calculating and monitoring cyclomatic complexity, we can identify significant changes or trends that may indicate data drift, thus allowing us to take corrective actions to maintain model performance.
+
+
 ## High Level End-to-End Design Overview
 The main branch of the git repository acts as the production and deployment system for the project. Whenever there is push into the main branch, Git Action triggers the below workflows.
 1. Sequence of steps are executed to build the training image and deployment image.
 2. Once the docker images are build, the images are exported and stored into the artifact registry in GCP.
-3. Parallelly, the model is build and stored in the model registry of HuggingFace.
-4. Next, the deployment image is triggered to pull the model stored in HuggingFace and generate an endpoint for the model.
 
 Additionally, an airflow pipeline has been scheduled to run everyday. The pipeline triggers the following sequence of tasks:
 1. Initially, the data pipeline gets triggered that works on cleaning and ensuring the quality of data.
-2. At the end of the data pipeline, a GCP VM instance is created that pulls the latest training image from the gcp artifact registry.
-3. Once the training image is run, the image is then deployed to to be accessible as the end point.
+2. At the end of the data pipeline, a GCP VM instance pulls the latest training image from the gcp artifact registry and executes it.
+3. Once the model training is done, the models is deployed to be accessible by the deployment image.
 
 
 ## User Interaction
@@ -188,3 +271,7 @@ Here are a few images of the chrome extension :-
 ![Chrome Extension snapshopt](assets/Chrome_Extension-1.png)
 ![Chrome Extension snapshopt](assets/Chrome_Extension-2.png)
 ![Chrome Extension snapshopt](assets/Chrome_Extension-3.png)
+
+
+Load Balancing
+For autoscaling com eng offers us to autom add or rem vm inst from a mang ist gr. so we can add our vm into autoscaling group which can handle load balancing. The reason we have not implemented this in our project is because we are using gpu based vm instance (l4 pgu) which is not being covered in the free trial version.'
