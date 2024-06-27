@@ -100,22 +100,6 @@ task_dvc_pipeline = PythonOperator(
     dag=dag,
 )
 
-GCE_INSTANCE = 'leetsummarizer'
-GCE_ZONE = 'us-west4-a'
-GCP_PROJECT_ID = 'leetsummarizer'
-
-task_ssh_vm_connect = SSHOperator(
-    task_id = 'composer_compute_ssh_task',
-    ssh_hook = ComputeEngineSSHHook(
-        instance_name = GCE_INSTANCE,
-        zone = GCE_ZONE,
-        project_id = GCP_PROJECT_ID,
-        use_oslogin = True,
-        use_iap_tunnel = False,
-        use_internal_ip = True),
-    command = 'echo This command is executed from a DAG',
-    dag=dag
-)
 
 task_send_email = PythonOperator(
     task_id='task_send_email',
@@ -142,7 +126,7 @@ task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
-task_dvc_pipeline >> task_send_email
+task_dvc_pipeline >> ssh_task >> task_send_email
 
 # Set up the failure callback
 dag.on_failure_callback = handle_failure
