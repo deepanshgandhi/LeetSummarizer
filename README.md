@@ -140,3 +140,23 @@ The model training script (train.py) consists of 8 distinct tasks. These tasks a
 ## Model Deployment
 We have another docker image for model serving. This image loads our model from huggingface and creates a /generate endpoint through fastapi. Similar to model training, we build and push the updated image for this whenever there's a push on the main branch. Once the model training image has run successfully on the vm instance, we pull the updated docker image for model serving, run it and expose the /generate endpoint. The chrome extension uses this endpoint to generate responses.
 We also have a /logs endpoint which displays the logs on a streamlit application. These logs are stored in a gcp bucket named model-results-and-logs. These logs help us track model performance and look for data drift and concept drift.
+
+
+## High Level End-to-End Design Overview
+The main branch of the git repository acts as the production and deployment system for the project. Whenever there is push into the main branch, Git Action triggers the below workflows.
+1. Sequence of steps are executed to build the training image and deployment image.
+2. Once the docker images are build, the images are exported and stored into the artifact registry in GCP.
+3. Parallelly, the model is build and stored in the model registry of HuggingFace.
+4. Next, the deployment image is triggered to pull the model stored in HuggingFace and generate an endpoint for the model.
+
+Additionally, an airflow pipeline has been scheduled to run everyday. The pipeline triggers the following sequence of tasks:
+1. Initially, the data pipeline gets triggered that works on cleaning and ensuring the quality of data.
+2. At the end of the data pipeline, a GCP VM instance is created that pulls the latest training image from the gcp artifact registry.
+3. Once the training image is run, the image is then deployed to to be accessible as the end point.
+
+The model is accessed by the application in the following manner:
+1. Once the end point is up and running, the endpoint is being accessed by API.
+2. The chrome extension scapes the question, code and username from LeetCode. We now have the data for summarization.
+3. The chrome extension sends out a request to the endpoint with the data.
+4. The model generates the summary of the code and sends back the same.
+5. And Voila! You now have the summarization of the code that you can go through
