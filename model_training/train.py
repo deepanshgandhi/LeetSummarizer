@@ -23,9 +23,11 @@ per_device_train_batch_size = 2
 gradient_accumulation_steps = 4
 warmup_steps = 5
 max_steps = 15
+logging_steps = 1
+weight_decay = 0.01
 bucket_name = 'airflow-dags-leetsummarizer'
 data_file_path = 'dags/data/preprocessed_data.json'
-
+learning_rate = 2e-4
 
 def load_data_from_gcs(bucket_name, file_path):
     """Load JSON data from Google Cloud Storage
@@ -154,12 +156,12 @@ def train_model(model, tokenizer, train_data, test_df, prompt):
             gradient_accumulation_steps = gradient_accumulation_steps,
             warmup_steps = warmup_steps,
             max_steps = max_steps,
-            learning_rate = 2e-4,
+            learning_rate = learning_rate,
             fp16 = not is_bfloat16_supported(),
             bf16 = is_bfloat16_supported(),
-            logging_steps = 1,
+            logging_steps = logging_steps,
             optim = "adamw_8bit",
-            weight_decay = 0.01,
+            weight_decay = weight_decay,
             lr_scheduler_type = "linear",
             seed = 3407,
             output_dir = "outputs",
@@ -291,10 +293,10 @@ params = {
     "gradient_accumulation_steps" : gradient_accumulation_steps,
     "warmup_steps" : warmup_steps,
     "max_steps" : max_steps,
-    "learning_rate" : 2e-4,
-    "logging_steps" : 1,
+    "learning_rate" : learning_rate,
+    "logging_steps" : logging_steps,
     "optim" : "adamw_8bit",
-    "weight_decay" : 0.01,
+    "weight_decay" : weight_decay,
     "lr_scheduler_type" : "linear",
     "seed" : 3407,
     "output_dir" : "outputs"
