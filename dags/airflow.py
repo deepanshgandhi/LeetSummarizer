@@ -25,6 +25,10 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
+GCE_INSTANCE = 'leetummarizer'
+GCE_ZONE = 'us-west4-a'
+GCP_PROJECT_ID = 'leetsummarizer'
+
 # Function to handle failur
 def handle_failure(context):
     task_instance = context['task_instance']
@@ -120,13 +124,25 @@ task_send_email = PythonOperator(
     dag=dag,
 )
 
+ssh_task = SSHOperator(
+      task_id='composer_compute_ssh_task',
+      ssh_hook=ComputeEngineSSHHook(
+          instance_name=GCE_INSTANCE,
+          zone=GCE_ZONE,
+          project_id=GCP_PROJECT_ID,
+          use_oslogin=True,
+          use_iap_tunnel=False,
+          use_internal_ip=True),
+      command='echo This command is executed from a DAG',
+      dag=dag)
+
 # Set up task dependencies
 task_load_data >> task_validate_schema
 task_validate_schema >> [task_handle_comments, task_validate_code]
 task_handle_comments >> task_print_final_data
 task_validate_code >> task_print_final_data
 task_print_final_data >> task_dvc_pipeline
-task_dvc_pipeline >> task_send_email
+task_dvc_pipeline >> task_send_email >> ssh_task
 
 # Set up the failure callback
 dag.on_failure_callback = handle_failure
