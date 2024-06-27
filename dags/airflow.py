@@ -132,7 +132,7 @@ ssh_task_train = SSHOperator(
         use_iap_tunnel=False
     ),
     command="cd /; sudo docker-compose -f docker-compose-train.yml -p leetsummarizer down; sudo docker-compose -f docker-compose-train.yml -p leetsummarizer pull; sudo docker-compose -f docker-compose-train.yml -p leetsummarizer up -d",
-    timeout = 6000,
+    cmd_timeout = 6000,
     dag=dag
 )
 
@@ -147,7 +147,7 @@ ssh_task_app = SSHOperator(
         use_iap_tunnel=False
     ),
     command="cd /; sudo docker-compose -f docker-compose-app.yml -p leetsummarizer down; sudo docker-compose -f docker-compose-app.yml -p leetsummarizer pull; sudo docker-compose -f docker-compose-app.yml -p leetsummarizer up -d",
-    timeout = 6000,
+    cmd_timeout = 6000,
     dag=dag
 )
 
