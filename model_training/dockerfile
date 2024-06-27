@@ -27,4 +27,4 @@ COPY train.py /app/train.py
 
 EXPOSE 5000
 
-CMD ["sh", "-c", "python train.py && mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root /mlflow --host 0.0.0.0 --port 5000"]
+CMD ["python", "train.py"]
