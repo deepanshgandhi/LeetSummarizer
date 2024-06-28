@@ -16,11 +16,13 @@ This is a Chrome extension that summarizes users' code on LeetCode in plain Engl
         - [Tracking](#tracking)
         - [Logging](#logging)
         - [DVC](#dvc)
+        - [Experimentation](#experimentation)
         - [Monitoring](#monitoring)
         - [Load Balancing](#load-balancing)
     - [CI-CD](#ci-cd)
     - [Model](#model)
     - [Model Components](#model-components)
+    - [Model Evaluation](#model-evaluation)
     - [Model Deployment](#model-deployment)
     - [Drift Detection](#drift-detection)
     - [High Level End-to-End Design Overview](#high-level-end-to-end-design-overview)
@@ -53,7 +55,7 @@ The dataset provided encompasses a comprehensive compilation of LeetCode questio
 The dataset utilized in this project was generated internally to suit the specific requirements and objectives of the analysis. This self-curated dataset ensures relevance and alignment with the research goals, allowing for tailored insights and interpretations. By crafting our own data, we maintain control over its quality and suitability for the intended analyses.
 
 ## Project Workflow
-![Project Workflow](assets/architecture_diagram.jpeg)
+![Project Workflow](assets/architecture_diagram.png)
 
 ## Tools Used In Project
 
@@ -73,7 +75,7 @@ pip install apache-airflow
 
 Next, start airflow's scheduler and web server to manage Directed Acyclic Graphs (DAGs) via a browser-based UI, where you define tasks and their dependencies for workflow automation.
 
-![Project Workflow](assets/pipeline_execution.png)
+![Project Workflow](assets/pipeline_execution.jpeg)
 
 
 <!-- ## 5. Data Pipeline Components
@@ -118,7 +120,12 @@ DVC (Data Version Control) plays a crucial role in managing and versioning large
 ![DVC Execution Screenshot](assets/DVC_eg.jpeg)
 
 #### Experimentation :
-Experimentation plays a major role in figuring out which model is better. <Give use of mlflow here>
+Experimentation is crucial in determining the most effective machine learning model for a given task. MLflow streamlines this process by providing a platform to 
+manage the end-to-end machine learning lifecycle. MLflow enables experiment tracking, logging, result comparison, and manage model versions, making it simpler to 
+identify the best-performing models and reproduce results.
+
+Project utilizes the prowess of MLFlow to track and compare the parameters and result metrics between Llama3 and MistralAI model. The results obtained have been 
+compared below for reference.
 
 | Model | Avg. Roguel Value | Avg. Similarity Value | Loss Value |
 |-----------------|-----------------|-----------------|-----------------|
@@ -131,7 +138,8 @@ MLFlow Tracking
 <!-- IMAGE GOES HERE -->
 ![MLFlow Experimentation](assets/mlflow_model_registry.png)
 
-GCP Tracking
+#### Monitoring
+GCP Instance Monitoring
 <!-- IMAGE GOES HERE -->
 ![GCP Monitoring](assets/cloud_stats.jpeg)
 
@@ -212,6 +220,25 @@ The model training script (train.py) consists of 8 distinct tasks. These tasks a
 7. evaluate_model : Evaluates a language model's performance on test data using ROUGE-L score and cosine similarity. Generates text based on prompts and evaluates against actual text in the test dataset. Computes and plots ROUGE-L scores and similarity scores per data point, saving the plots to Google Cloud Storage.
 
 8. push_model_huggingface: Pushes a trained model to the HuggingFace ModelHub using its API token. Saves the API token using HfFolder.save_token() and then uses trainer.model.push_to_hub() to upload the model to a specific repository (deepansh1404/leetsummarizer-mistral).
+
+
+## Model Evaluation
+There are two primary methods for evaluating the model:
+
+- Rouge-L Score: This common metric for code evaluation measures the quality of the summary by identifying the longest common subsequence between the predicted and expected summaries. It helps determine how well the predicted summary captures the essential content of the expected summary.
+
+<!-- IMAGE GOES HERE -->
+![RougeL Score](assets/rouge_score.png)
+
+- Semantic Similarity: This method evaluates the model by assessing the semantic meaning of the predicted and expected summaries. By comparing the underlying meanings rather than just the surface forms, semantic similarity provides a deeper understanding of how accurately the model captures the intended message. Various techniques, such as cosine similarity between word embeddings or sentence transformers, can be used to compute this metric.
+
+<!-- IMAGE GOES HERE -->
+![Semantic Score](assets/similarity_score.png)
+ 
+We obtained the following Training Loss output on the selected model.
+
+<!-- IMAGE GOES HERE -->
+![Training Loss](assets/training_loss.png)
 
 
 ## Model Deployment
