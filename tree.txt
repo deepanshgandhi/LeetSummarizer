@@ -3,178 +3,8 @@
 │   ├── .gitignore
 │   └── config
 ├── .git
-│   ├── hooks
-│   │   ├── applypatch-msg.sample
-│   │   ├── commit-msg.sample
-│   │   ├── fsmonitor-watchman.sample
-│   │   ├── post-update.sample
-│   │   ├── pre-applypatch.sample
-│   │   ├── pre-commit.sample
-│   │   ├── pre-merge-commit.sample
-│   │   ├── pre-push.sample
-│   │   ├── pre-rebase.sample
-│   │   ├── pre-receive.sample
-│   │   ├── prepare-commit-msg.sample
-│   │   ├── push-to-checkout.sample
-│   │   └── update.sample
-│   ├── info
-│   │   └── exclude
-│   ├── logs
-│   │   ├── refs
-│   │   └── HEAD
-│   ├── objects
-│   │   ├── 06
-│   │   ├── 07
-│   │   ├── 08
-│   │   ├── 09
-│   │   ├── 0a
-│   │   ├── 0b
-│   │   ├── 0c
-│   │   ├── 0d
-│   │   ├── 11
-│   │   ├── 12
-│   │   ├── 13
-│   │   ├── 16
-│   │   ├── 18
-│   │   ├── 1d
-│   │   ├── 1e
-│   │   ├── 1f
-│   │   ├── 21
-│   │   ├── 22
-│   │   ├── 26
-│   │   ├── 29
-│   │   ├── 2b
-│   │   ├── 2c
-│   │   ├── 2f
-│   │   ├── 30
-│   │   ├── 31
-│   │   ├── 32
-│   │   ├── 35
-│   │   ├── 37
-│   │   ├── 39
-│   │   ├── 3a
-│   │   ├── 3b
-│   │   ├── 3c
-│   │   ├── 3d
-│   │   ├── 3e
-│   │   ├── 3f
-│   │   ├── 40
-│   │   ├── 42
-│   │   ├── 43
-│   │   ├── 50
-│   │   ├── 52
-│   │   ├── 55
-│   │   ├── 56
-│   │   ├── 57
-│   │   ├── 58
-│   │   ├── 59
-│   │   ├── 5d
-│   │   ├── 60
-│   │   ├── 62
-│   │   ├── 63
-│   │   ├── 64
-│   │   ├── 65
-│   │   ├── 66
-│   │   ├── 68
-│   │   ├── 69
-│   │   ├── 6c
-│   │   ├── 6d
-│   │   ├── 6f
-│   │   ├── 70
-│   │   ├── 71
-│   │   ├── 73
-│   │   ├── 75
-│   │   ├── 76
-│   │   ├── 77
-│   │   ├── 7b
-│   │   ├── 7c
-│   │   ├── 7f
-│   │   ├── 82
-│   │   ├── 84
-│   │   ├── 85
-│   │   ├── 89
-│   │   ├── 8a
-│   │   ├── 8b
-│   │   ├── 8c
-│   │   ├── 90
-│   │   ├── 91
-│   │   ├── 92
-│   │   ├── 93
-│   │   ├── 94
-│   │   ├── 95
-│   │   ├── 99
-│   │   ├── 9a
-│   │   ├── 9c
-│   │   ├── a0
-│   │   ├── a1
-│   │   ├── a4
-│   │   ├── a5
-│   │   ├── a6
-│   │   ├── a7
-│   │   ├── aa
-│   │   ├── ac
-│   │   ├── af
-│   │   ├── b0
-│   │   ├── b1
-│   │   ├── b4
-│   │   ├── b5
-│   │   ├── b6
-│   │   ├── b7
-│   │   ├── b8
-│   │   ├── b9
-│   │   ├── bc
-│   │   ├── be
-│   │   ├── c0
-│   │   ├── c1
-│   │   ├── c2
-│   │   ├── c4
-│   │   ├── c5
-│   │   ├── c7
-│   │   ├── c9
-│   │   ├── ca
-│   │   ├── cb
-│   │   ├── cd
-│   │   ├── d1
-│   │   ├── d2
-│   │   ├── d3
-│   │   ├── d4
-│   │   ├── d5
-│   │   ├── d6
-│   │   ├── d9
-│   │   ├── da
-│   │   ├── dc
-│   │   ├── df
-│   │   ├── e0
-│   │   ├── e1
-│   │   ├── e3
-│   │   ├── e4
-│   │   ├── e5
-│   │   ├── e6
-│   │   ├── eb
-│   │   ├── ec
-│   │   ├── ee
-│   │   ├── ef
-│   │   ├── f0
-│   │   ├── f2
-│   │   ├── f5
-│   │   ├── f8
-│   │   ├── f9
-│   │   ├── fd
-│   │   ├── fe
-│   │   ├── info
-│   │   └── pack
-│   ├── refs
-│   │   ├── heads
-│   │   ├── remotes
-│   │   └── tags
-│   ├── COMMIT_EDITMSG
-│   ├── FETCH_HEAD
-│   ├── HEAD
-│   ├── ORIG_HEAD
 │   ├── config
 │   ├── description
-│   ├── index
-│   ├── packed-refs
 │   └── sourcetreeconfig
 ├── .github
 │   └── workflows
@@ -184,7 +14,6 @@
 │   ├── Load_to_bigquery.py
 │   └── Logging.py
 ├── Scraping
-│   ├── .DS_Store
 │   └── problem_scrape.py
 ├── assets
 │   ├── Chrome_Extension-1.png
@@ -196,70 +25,6 @@
 │   └── pipeline_flow.jpg
 ├── backend
 │   ├── node_modules
-│   │   ├── .bin
-│   │   ├── accepts
-│   │   ├── array-flatten
-│   │   ├── body-parser
-│   │   ├── bytes
-│   │   ├── call-bind
-│   │   ├── content-disposition
-│   │   ├── content-type
-│   │   ├── cookie
-│   │   ├── cookie-signature
-│   │   ├── debug
-│   │   ├── define-data-property
-│   │   ├── depd
-│   │   ├── destroy
-│   │   ├── ee-first
-│   │   ├── encodeurl
-│   │   ├── es-define-property
-│   │   ├── es-errors
-│   │   ├── escape-html
-│   │   ├── etag
-│   │   ├── express
-│   │   ├── finalhandler
-│   │   ├── forwarded
-│   │   ├── fresh
-│   │   ├── function-bind
-│   │   ├── get-intrinsic
-│   │   ├── gopd
-│   │   ├── has-property-descriptors
-│   │   ├── has-proto
-│   │   ├── has-symbols
-│   │   ├── hasown
-│   │   ├── http-errors
-│   │   ├── iconv-lite
-│   │   ├── inherits
-│   │   ├── ipaddr.js
-│   │   ├── media-typer
-│   │   ├── merge-descriptors
-│   │   ├── methods
-│   │   ├── mime
-│   │   ├── mime-db
-│   │   ├── mime-types
-│   │   ├── ms
-│   │   ├── negotiator
-│   │   ├── object-inspect
-│   │   ├── on-finished
-│   │   ├── parseurl
-│   │   ├── path-to-regexp
-│   │   ├── proxy-addr
-│   │   ├── qs
-│   │   ├── range-parser
-│   │   ├── raw-body
-│   │   ├── safe-buffer
-│   │   ├── safer-buffer
-│   │   ├── send
-│   │   ├── serve-static
-│   │   ├── set-function-length
-│   │   ├── setprototypeof
-│   │   ├── side-channel
-│   │   ├── statuses
-│   │   ├── toidentifier
-│   │   ├── type-is
-│   │   ├── unpipe
-│   │   ├── utils-merge
-│   │   ├── vary
 │   │   └── .package-lock.json
 │   ├── .dockerignore
 │   ├── dockerfile
@@ -269,11 +34,6 @@
 ├── config
 │   └── airflow.cfg
 ├── dags
-│   ├── __pycache__
-│   │   ├── airflow.cpython-312.pyc
-│   │   ├── model.cpython-312.pyc
-│   │   ├── model_pipeline.cpython-312.pyc
-│   │   └── my_custom_log_config.cpython-312.pyc
 │   ├── src
 │   │   ├── __pycache__
 │   │   ├── data_preprocessing
@@ -282,12 +42,6 @@
 │   ├── .DS_Store
 │   └── airflow.py
 ├── data_drift
-│   ├── __pycache__
-│   │   ├── code_complexity.cpython-310.pyc
-│   │   ├── compare_complexities.cpython-310.pyc
-│   │   ├── load_code.cpython-310.pyc
-│   │   ├── load_data_from_firestore.cpython-310.pyc
-│   │   └── load_train_data.cpython-310.pyc
 │   ├── code_complexity.py
 │   ├── compare_complexities.py
 │   ├── drift_detection.py
@@ -296,21 +50,11 @@
 │   ├── requirements.txt
 │   └── service_account_key.json
 ├── data_pipeline
-│   ├── .gitignore
 │   ├── Leet_Summarizer_train_data.csv
 │   ├── data.json.dvc
 │   └── write_to_firestore.py
 ├── frontend
-│   ├── .idea
-│   │   ├── .gitignore
-│   │   ├── frontend.iml
-│   │   ├── misc.xml
-│   │   ├── modules.xml
-│   │   └── vcs.xml
 │   ├── icons
-│   │   ├── icon128.png
-│   │   ├── icon16.png
-│   │   └── icon48.png
 │   ├── background.js
 │   ├── content.js
 │   ├── manifest.json
@@ -333,7 +77,6 @@
 │   │   ├── __init__.py
 │   │   ├── test_remove_comments.py
 │   │   └── test_validate_code.py
-│   ├── .DS_Store
 │   ├── __init__.py
 │   ├── model.ipynb
 │   └── updated_Model_func.ipynb
