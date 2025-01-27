@@ -11,7 +11,6 @@ def print_final_data(data: list, bucket_name: str, destination_blob_name: str, *
     Returns:
     None
     """
-    print("MAKING CHANGES HERE")
     for item in data:
         code = item.get('Code', '')
         question = item.get('Question','')

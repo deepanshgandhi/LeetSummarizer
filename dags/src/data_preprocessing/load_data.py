@@ -29,9 +29,3 @@ def load_data() -> list:
         raise RuntimeError("Failed to load data from Firestore.") from e
 
     return data
-
-
-
-# def load_data():
-#     # Simulate a failure condition
-#     raise Exception("Simulated failure for testing purposes")
