@@ -46,7 +46,6 @@ def is_valid_python_code(code):
 @app.on_event("startup")
 async def load_model():
     global model, tokenizer
-    #config = PeftConfig.from_pretrained("deepansh1404/leetsummarizer")
     logging.info("Loading base model...")
     base_model = AutoModelForCausalLM.from_pretrained("unsloth/mistral-7b-v0.3-bnb-4bit")
     logging.info("Base model loaded successfully.")
@@ -62,7 +61,6 @@ async def generate_summary(request: TextRequest):
     logging.info(f"Question: {request.question}")
     logging.info(f"Code: {request.code}")
     try:
-        #input_text = f"Question: {request.question}\nCode: {request.code}"
         if not is_valid_python_code(request.code):
             logging.error("Invalid Python code received.")
             return {"status":400, "summary": "Invalid Python code"}
@@ -85,7 +83,6 @@ async def stream_logs(response: Response):
         log_entries = list(logging_client.list_entries())
         log_stream = '\n'.join([entry.payload for entry in log_entries])
 
-        # Set content type and return streamed logs
         response.headers["Content-Type"] = "text/plain"
         return PlainTextResponse(log_stream)
     except Exception as e:
